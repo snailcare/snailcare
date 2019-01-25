@@ -1,4 +1,10 @@
 {
   "name": "snailcareApp",
-  "app_id": ""
+  "app_id": "",
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ]
 }
