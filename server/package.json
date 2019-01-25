@@ -1,0 +1,28 @@
+{
+  "name": "snail_server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.15.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "ejs": "~2.4.1",
+    "express": "~4.13.4",
+    "morgan": "~1.7.0",
+    "promise": "^7.1.1",
+    "serve-favicon": "~2.3.0",
+    "fs": "~0.0.2",
+    "mkdirp": "",
+    "underscore": "~1.8.3",
+    "winston": "^2.3.1",
+    "winston-daily-rotate-file": "^1.4.6",
+    "express-session": "~1.13.0",
+    "request": "",
+    "dateformat": "",
+    "pg": "",
+    "pg-pool": ""
+  }
+}
