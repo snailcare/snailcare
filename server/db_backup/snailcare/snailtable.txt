@@ -1,6 +1,0 @@
-CREATE TABLE snailcare.snailtable (
-	snailcolumn varchar NULL
-)
-WITH (
-	OIDS=FALSE
-) ;
