@@ -1,5 +1,17 @@
-
+var Pool = require('pg-pool')
 var Promise = require('promise');
+
+var pool = new Pool({
+	host: 'baasu.db.elephantsql.com',
+	database: 'qbyovcvu',
+	user: 'qbyovcvu',
+	password: 'H6x2eyjtYTbgMOLSpK405aBVy07lO1B1',
+	port: 5432,
+	ssl: true,
+	max: 100,
+	idleTimeoutMillis: 999999,
+	connectionTimeoutMillis: 999999, // return an error after 1 second if connection could not be established
+});
 
 
 module.exports = {
@@ -8,21 +20,19 @@ module.exports = {
 
         getUser: function(userName, password) {
            
-            return new Promise(function(resolve, reject) {
-                var query = Users.findOne({ 'userName': userName, 'password': password });
-
-                query.exec(function(err, user) {
-                    if (err) {
-                        console.log(err);
-                        reject(err);
-                    }
-                    if (user != null) {
-                        resolve(user);
-                    } else {
-                        reject("No matching user found");
-                    }
-                });
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {					
+					client.query('select 1 as name').then(res => {
+						client.release()
+						resolve(res.rows);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})
+				})
             });
+			
         }
 		
     }
