@@ -1,25 +1,21 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../dal');
-var Promise = require('promise');
-const {SHA256} = require('sha2');
+let users = require('../bl/users');
 var logger = require('../logger');
 
+
 //TODO: change to POST
-router.get('/login', function(req,res){
+router.get('/login', function(req, res){
 	logger.info('running: /login');
 	//var userName = req.body.userName;
-	//var password = req.body.password;
-	
+	//var password = req.body.password;	
 	var userName = 'a124';
-	var password = 'a12456';		
-	hash = SHA256(password).toString("hex");
-	db.UserFunctions.getUser(userName, hash)
-	.done(function(user){		
+	var password = 'a12456';	
+	users.login(userName, password).done(function(user){		
 		res.json({status: true, user: user});
-	},function(err){
-		res.json({status: false});
-	});
+	},function(e){
+		res.json({status: false, error: e});
+	});	
 });
 
 module.exports = router;

@@ -10,7 +10,7 @@ var pool = new Pool({
 	ssl: true,
 	max: 100,
 	idleTimeoutMillis: 999999,
-	connectionTimeoutMillis: 999999, // return an error after 1 second if connection could not be established
+	connectionTimeoutMillis: 999999
 });
 
 
@@ -21,8 +21,9 @@ module.exports = {
         getUser: function(userName, password) {
            
             return new Promise(function(resolve, reject) {				
-				pool.connect().then(client => {					
-					client.query('select 1 as name').then(res => {
+				pool.connect().then(client => {	
+
+					client.query('select 1 as name').then(res => {						
 						client.release()
 						resolve(res.rows);
 					})
@@ -30,6 +31,7 @@ module.exports = {
 						client.release();						
 						reject(e);
 					})
+					
 				})
             });
 			
