@@ -1,5 +1,6 @@
 var Pool = require('pg-pool')
 var Promise = require('promise');
+var logger = require('../logger');
 
 var pool = new Pool({
 	host: 'baasu.db.elephantsql.com',
@@ -18,12 +19,13 @@ module.exports = {
 
     UserFunctions: {       
 
-        getUser: function(userName, password) {
+        getUser: function(id, password) {
            
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
-
-					client.query('select 1 as name').then(res => {						
+					query = `select id from snailcare.users where id = '${id}' and password = '${password}' limit 1`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {								
 						client.release()
 						resolve(res.rows);
 					})

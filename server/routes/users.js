@@ -6,13 +6,14 @@ var logger = require('../logger');
 
 //TODO: change to POST
 router.get('/login', function(req, res){
-	logger.info('running: /login');
-	//var userName = req.body.userName;
+	logger.info('route: /login');
+	//var id = req.body.id;
 	//var password = req.body.password;	
-	var userName = 'a124';
-	var password = 'a12456';	
-	users.login(userName, password).done(function(user){		
-		res.json({status: true, user: user});
+	var id = 'aaa';
+	var password = '1234';	
+	users.login(id, password).done(function(data){
+		req.session.id = (data) ? id : undefined;
+		res.json({status: true, is_exists: data});
 	},function(e){
 		res.json({status: false, error: e});
 	});	

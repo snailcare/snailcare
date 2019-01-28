@@ -7,13 +7,13 @@ var logger = require('../logger');
 
 module.exports = {
 	
-	login: function(userName, password) {	
+	login: function(id, password) {	
 	
 		return new Promise(function(resolve, reject) {			
-			hash = SHA256(password).toString("hex");			
-			db.UserFunctions.getUser(userName, hash)
-			.done(function(user){		
-				resolve(user);
+			hash = SHA256(password).toString("hex");
+			db.UserFunctions.getUser(id, hash)
+			.done(function(data){
+				resolve((data.length) ? true : false);
 			},function(e){
 				reject(e);
 			});			
