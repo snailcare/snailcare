@@ -1,0 +1,21 @@
+-- Drop table
+
+ 
+
+-- DROP TABLE snailcare.branch
+
+ 
+
+CREATE TABLE snailcare.branch (
+
+       code SERIAL NOT NULL,
+
+       "name" varchar NULL,
+
+       area_code int4 NULL,
+
+       CONSTRAINT branch_pkey PRIMARY KEY (code),
+
+       CONSTRAINT branch_area_code_fkey FOREIGN KEY (area_code) REFERENCES snailcare.area(code)
+
+);

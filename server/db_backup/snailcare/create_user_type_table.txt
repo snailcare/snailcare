@@ -1,0 +1,17 @@
+-- Drop table
+
+ 
+
+-- DROP TABLE snailcare.user_type
+
+ 
+
+CREATE TABLE snailcare.user_type (
+
+       "type" SERIAL NOT NULL,
+
+       description varchar NULL,
+
+       CONSTRAINT user_type_pkey PRIMARY KEY (type)
+
+);

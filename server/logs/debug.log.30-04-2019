@@ -1,0 +1,17 @@
+{"level":"info","message":"route: /","timestamp":"2019-04-30T20:32:50.700Z"}
+{"level":"info","message":"route: /login","timestamp":"2019-04-30T20:33:02.190Z"}
+{"level":"info","message":"running: select id, user_type, first_name, last_name from snailcare.person where id = 'aaa' and password = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4' limit 1","timestamp":"2019-04-30T20:33:03.903Z"}
+{"level":"info","message":"route: /get_clients","timestamp":"2019-04-30T20:33:32.587Z"}
+{"level":"info","message":"running: select * from snailcare.person where user_type = 1 and is_active = '1'","timestamp":"2019-04-30T20:33:32.590Z"}
+{"level":"info","message":"route: /get_branches","timestamp":"2019-04-30T20:33:52.747Z"}
+{"level":"info","message":"running: select b.code, b.name as \"branchName\", b.area_code as \"areaCode\", a.name as \"areaCodeName\" from snailcare.branch b join snailcare.area a on b.area_code = a.code","timestamp":"2019-04-30T20:33:52.757Z"}
+{"level":"info","message":"route: /get_areas","timestamp":"2019-04-30T20:33:53.024Z"}
+{"level":"info","message":"running: select * from snailcare.area","timestamp":"2019-04-30T20:33:53.028Z"}
+{"level":"info","message":"route: /get_staffs","timestamp":"2019-04-30T20:34:11.832Z"}
+{"level":"info","message":"running: select s.id, p.first_name as \"firstName\", p.last_name as \"lastName\", p.phone_number as \"phoneNumber\", p.email, s.profession as \"professionCode\",pro.name as \"professionName\" ,s.branch as \"branchCode\", b.name as \"branchName\", s.personal_information as \"personalInformation\" from ((snailcare.staff s join snailcare.branch b on (s.branch = b.code)) join snailcare.profession pro on (s.profession = pro.code)) join snailcare.person p on (p.id = s.id) where p.user_type = 3 and is_active = '1'","timestamp":"2019-04-30T20:34:11.835Z"}
+{"level":"info","message":"route: /get_branches","timestamp":"2019-04-30T20:34:12.084Z"}
+{"level":"info","message":"running: select b.code, b.name as \"branchName\", b.area_code as \"areaCode\", a.name as \"areaCodeName\" from snailcare.branch b join snailcare.area a on b.area_code = a.code","timestamp":"2019-04-30T20:34:12.091Z"}
+{"level":"info","message":"route: /get_professions","timestamp":"2019-04-30T20:34:12.323Z"}
+{"level":"info","message":"running: select * from snailcare.profession","timestamp":"2019-04-30T20:34:12.327Z"}
+{"level":"info","message":"route: /get_deleted_clients","timestamp":"2019-04-30T20:34:33.349Z"}
+{"level":"info","message":"running: select * from snailcare.person where user_type = 1 and is_active <> '1'","timestamp":"2019-04-30T20:34:33.350Z"}

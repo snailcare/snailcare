@@ -1,0 +1,27 @@
+-- Drop table
+
+ 
+
+-- DROP TABLE snailcare.staff
+
+ 
+
+CREATE TABLE snailcare.staff (
+
+       id varchar NOT NULL,
+
+       profession int4 NULL,
+
+       branch int4 NULL,
+
+       personal_information varchar NULL,
+
+       CONSTRAINT staff_pkey PRIMARY KEY (id),
+
+       CONSTRAINT staff_branch_fkey FOREIGN KEY (branch) REFERENCES snailcare.branch(code),
+
+       CONSTRAINT staff_id_fkey FOREIGN KEY (id) REFERENCES snailcare.person(id),
+
+       CONSTRAINT staff_profession_fkey FOREIGN KEY (profession) REFERENCES snailcare.profession(code)
+
+);

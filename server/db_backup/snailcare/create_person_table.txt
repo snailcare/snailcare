@@ -1,0 +1,33 @@
+-- Drop table
+
+ 
+
+-- DROP TABLE snailcare.person
+
+ 
+
+CREATE TABLE snailcare.person (
+
+       id varchar NOT NULL,
+
+       first_name varchar NULL,
+
+       last_name varchar NULL,
+
+       address varchar NULL,
+
+       phone_number varchar NULL,
+
+       is_active varchar NULL,
+
+       user_type int4 NULL,
+
+       email varchar NULL,
+
+       "password" varchar NULL,
+
+       CONSTRAINT person_pkey PRIMARY KEY (id),
+
+       CONSTRAINT person_user_type_fkey FOREIGN KEY (user_type) REFERENCES snailcare.user_type(type)
+
+);

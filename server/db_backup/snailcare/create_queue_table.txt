@@ -1,0 +1,29 @@
+-- Drop table
+
+ 
+
+-- DROP TABLE snailcare.queue
+
+ 
+
+CREATE TABLE snailcare.queue (
+
+       staff_id varchar NOT NULL,
+
+       "date" int4 NOT NULL,
+
+       "hour" int4 NOT NULL,
+
+       status int4 NULL,
+
+       id varchar NULL,
+
+       CONSTRAINT queue_pkey PRIMARY KEY (staff_id, date, hour),
+
+       CONSTRAINT queue_id_fkey FOREIGN KEY (id) REFERENCES snailcare.person(id),
+
+       CONSTRAINT queue_staff_id_fkey FOREIGN KEY (staff_id) REFERENCES snailcare.staff(id),
+
+       CONSTRAINT queue_status_fkey FOREIGN KEY (status) REFERENCES snailcare.queue_status(code)
+
+);

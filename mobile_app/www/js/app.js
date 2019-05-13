@@ -8,49 +8,11 @@ angular.module('snailcareapp', ['ionic', 'snailcareapp.controllers', 'snailcarea
 
   .run(function ($ionicPlatform,$rootScope,$state,AppFactory) {
     $ionicPlatform.ready(function () {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      if (window.cordova && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(true);
-
-      }
-      if (window.StatusBar) {
-        // org.apache.cordova.statusbar required
-        StatusBar.styleDefault();
-      }
+      
+      
       if ((!$rootScope.userId || $rootScope.userId === -1) && $state.$current !== 'app.login') {
         console.log('unknown user, referring...');
-        $state.go('app.login');
-		
-        // if localStorage holds a userId -> user has been previously logged -> log the user in
-        if (localStorage.userId) {
-          $rootScope.userId = localStorage.userId;
-          console.log('Found userId in localStorage: ' + $rootScope.userId);
-          AppFactory.loginUserById($rootScope.userId)
-            .success(function (data) {
-              
-              if (data.status) {
-                $rootScope.user = data.user;
-                $rootScope.autoLoginMsg = "Hello " + $rootScope.user.userName + ", You have been logged in automatically";
-                $state.go('app.login');
-                $rootScope.initTasks();
-              }
-              else { // user not found, refer to login
-                $rootScope.userId = -1;
-                $state.go('app.login');
-              }
-            })
-        }
-
-        // get host and port defaults from localStorage if exists
-        if (localStorage.host) {
-          $rootScope.host = localStorage.host;
-        }
-
-        if (localStorage.port) {
-          $rootScope.port = localStorage.port;
-        }
+        $state.go('app.login');       
       }
     });
   })

@@ -7,6 +7,11 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var appointments = require('./routes/appointments');
+var branches = require('./routes/branches');
+var staffs = require('./routes/staffs');
+var area = require('./routes/area');
+
 
 var app = express();
 var session = require('express-session');
@@ -32,6 +37,10 @@ app.use(allowCrossDomain);
 app.use(session({secret: 'snail', resave: false, saveUninitialized: false, cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }})); // 30 days
 app.use('/', routes);
 app.use('/users', users);
+app.use('/appointments', appointments);
+app.use('/branches', branches);
+app.use('/staffs', staffs);
+app.use('/area', area);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -10,6 +10,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 
       // defaults and inits
       $scope.socket = {};
+	  $scope.loginData = {};
       $rootScope.user = null;
       $rootScope.userId = -1;
 
@@ -26,11 +27,10 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
       if (userId && password && userId.length > 0 && password.length > 0) {
         AppFactory.login(userId, password)
           .success(function (data) {            
-            if (data.status) {
-              $rootScope.userId = data.user._id;
-              $rootScope.user = data.user;
+            if (data.status && data.is_exists) {
+              $rootScope.userId = data.id;
+              $rootScope.user = data.name;
               $state.go('app.login');
-
               localStorage.userId = $rootScope.userId;
               $rootScope.initTasks();
             }
@@ -47,7 +47,52 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
         $rootScope.alertPopup("Please fill in these required fields");
       }
     };
+	
+	/**
+     * logout :: function
+     * description: Logs out the current user
+     */
+    $scope.logout = function () {
+      $rootScope.userId = -1;
+      $rootScope.user = null;
+      $scope.loginData = {};
+      $scope.tasks = [];
+      localStorage.removeItem('userId');
+      $rootScope.alertPopup("Logged out successfully");
+	  
+	  AppFactory.logout()
+          .success(function (data) {            
+			$state.go('app.login');
+          })
+          .error(function (e) {
+            console.error(e);
+            $state.go('app.login');
+          });      
+    };
+	
+	/**
+     * alertPopup :: function
+     * description: Generic function for Ionic Alert Popup
+     */
+    $rootScope.alertPopup = function (title, subtitle, callback) {
+      var alertPopup = $ionicPopup.alert({
+        title: title,
+        template: subtitle,
+        buttons: [
+          {
+            text: 'OK',
+            type: 'button-assertive'
+          }
+        ]
+      });
 
+      alertPopup.then(function (res) {
+        if (callback) {
+          callback(res);
+        }
+      });
+    };
+	  
     // Trigger App on js load
     $scope.initApp();
   });

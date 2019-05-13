@@ -1,0 +1,5 @@
+{"level":"info","message":"route: /login","timestamp":"2019-05-10T17:04:24.451Z"}
+{"level":"info","message":"running: select id, user_type, first_name, last_name from snailcare.person where id = 'aaa' and password = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4' and is_active = '1' limit 1","timestamp":"2019-05-10T17:04:25.905Z"}
+{"level":"info","message":"route: /logout","timestamp":"2019-05-10T17:04:40.660Z"}
+{"level":"info","message":"route: /login","timestamp":"2019-05-10T17:04:47.710Z"}
+{"level":"info","message":"running: select id, user_type, first_name, last_name from snailcare.person where id = 'aaa' and password = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4' and is_active = '1' limit 1","timestamp":"2019-05-10T17:04:47.713Z"}

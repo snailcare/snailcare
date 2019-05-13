@@ -1,0 +1,3 @@
+{"level":"info","message":"route: /login","timestamp":"2019-05-13T18:27:48.678Z"}
+{"level":"info","message":"running: select id, user_type, first_name, last_name from snailcare.person where id = 'aaa' and password = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4' and is_active = '1' limit 1","timestamp":"2019-05-13T18:27:50.088Z"}
+{"level":"info","message":"route: /","timestamp":"2019-05-13T18:55:23.830Z"}

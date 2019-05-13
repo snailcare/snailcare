@@ -1,0 +1,17 @@
+-- Drop table
+
+ 
+
+-- DROP TABLE snailcare.area
+
+ 
+
+CREATE TABLE snailcare.area (
+
+       code SERIAL NOT NULL,
+
+       "name" varchar NULL,
+
+       CONSTRAINT area_pkey PRIMARY KEY (code)
+
+);

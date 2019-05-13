@@ -3,8 +3,6 @@ var app = (function () {
   // create app module
   var app = angular.module('app', ['ngRoute']);
 
-  var date = '07_11_2016';
-
   // app configuration
   app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
     // intercept POST requests, convert to standard form encoding
@@ -22,91 +20,74 @@ var app = (function () {
     // set routing
     $routeProvider
       .when('/', {
-        templateUrl: './templates/main.html?ver=' + date
+        templateUrl: './templates/main.html'
       })
       .when('/home', {
-        templateUrl: './templates/main.html?ver=' + date
+        templateUrl: './templates/main.html'
       })
       .when('/login', {
-        templateUrl: './templates/login.html?ver=' + date
+        templateUrl: './templates/login.html'
       })
-      .when('/Items/list', {
-        templateUrl: './templates/Items/list.html?ver=' + date,
-        resolve: {
-          initData: function ($q, $http, $route) {
-            var defer = $q.defer(); // create a promise object
-
-            $http({ // ajax http call
-              method: 'POST',
-              url: serverUrl + 'items/showallitems',
-              cache: false
-            })
-              .success(function (data, status) {
-                if (status == 200) {
-                  defer.resolve(data); // resolve with data
-                }
-              })
-              .error(function (data, status, headers, config) {
+	  .when('/Branches/add', {
+        templateUrl: './templates/Branches/add.html',
+		resolve: {
+			initData: function ($q, $http, $route) {
+				var defer = $q.defer(); // create a promise object
+				$http({ // ajax http call
+				  method: 'POST',
+				  url: serverUrl + 'area/get_areas',
+				  cache: false
+				}).success(function (data, status) {
+					if (status == 200) {
+					  defer.resolve(data); // resolve with data
+					}
+				}).error(function (data, status, headers, config) {
                 console.log(data);
-              });
-
-            return defer.promise; // return promise object
-          }
-        }
+				});
+				return defer.promise; // return promise object
+			}
+		}
       })
-      .when('/Orders/list', {
-        templateUrl: './templates/Orders/list.html?ver=' + date,
-        resolve: {
-          initData: function ($q, $http, $route) {
-            var defer = $q.defer(); // create a promise object
-
-            $http({ // ajax http call
-              method: 'POST',
-              url: serverUrl + 'orders/showallorders',
-              cache: false
-            })
-              .success(function (data, status) {
-                if (status == 200) {
-                  defer.resolve(data); // resolve with data
-                }
-              })
-              .error(function (data, status, headers, config) {
+	  .when('/Branches/list', {
+        templateUrl: './templates/Branches/list.html',
+		resolve: {
+			initData: function ($q, $http, $route) {
+				var defer = $q.defer(); // create a promise object
+				$http({ // ajax http call
+				  method: 'POST',
+				  url: serverUrl + 'branches/get_branches',
+				  cache: false
+				}).success(function (data, status) {
+					if (status == 200) {
+					  defer.resolve(data); // resolve with data
+					}
+				}).error(function (data, status, headers, config) {
                 console.log(data);
-              });
-
-            return defer.promise; // return promise object
-          }
-        }
+				});
+				return defer.promise; // return promise object
+			}
+		}
       })
-      .when('/Users', {
-        templateUrl: './templates/Users/list.html?ver=' + date,
-        resolve: {
-          initData: function ($q, $http, $route) {
-            var defer = $q.defer(); // create a promise object
-
-            $http({ // ajax http call
-              method: 'POST',
-              url: serverUrl + 'users/showallusers',
-              cache: false
-            })
-              .success(function (data, status) {
-                if (status == 200) {
-                  defer.resolve(data); // resolve with data
-                }
-              })
-              .error(function (data, status, headers, config) {
-                console.log(data);
-              });
-
-            return defer.promise; // return promise object
-          }
-        }
+	  .when('/Clients/add', {
+        templateUrl: './templates/Clients/add.html'
       })
-      .when('/Users/add', {
-        templateUrl: './templates/Users/add.html?ver=' + date
+	  .when('/Clients/list', {
+        templateUrl: './templates/Clients/list.html'
+      })
+	  .when('/Clients/deleted_list', {
+        templateUrl: './templates/Clients/deleted_list.html'
+      })
+	  .when('/Staff/add', {
+        templateUrl: './templates/Staff/add.html'
+      })
+	  .when('/Staff/list', {
+        templateUrl: './templates/Staff/list.html'
+      })
+	  .when('/analytics', {
+        templateUrl: './templates/Analytics/analytics.html'
       })
       .otherwise({
-        templateUrl: './templates/404.html?ver=' + date
+        templateUrl: './templates/404.html'
       });
   }])
     .run(function($location,$rootScope,Factory,$timeout){
@@ -144,48 +125,11 @@ var app = (function () {
           $rootScope.$$childHead.hCtrl.collapseMenu();
         }
 
-        if ($rootScope.userId === -1) {
-          if (next.templateUrl == "/templates/users.html?ver=" + date) { }
+        if (!$rootScope.userId || $rootScope.userId === -1) {
+          if (next.templateUrl == "/templates/users.html") { }
           else {
-            if (localStorage) {
-              if (localStorage.userId) {
-                $rootScope.userId = localStorage.userId;
-                console.log('Found userId in localStorage: ' + $rootScope.userId);
-                Factory.loginUserById($rootScope.userId)
-                  .success(function (data) {
-                    if (data.status) {
-                      if (data.user.securityLevel !== "3") {
-                        console.log(data.user.securityLevel);
-                        $rootScope.loginData.errMsg = "You don't have permission to enter the admin panel";
-                        $rootScope.user = {};
-                        $rootScope.userId = -1;
-                        $rootScope.userName = '';
-                      }
-                      else {
-                        $rootScope.userId = data.user._id;
-                        $rootScope.user = data.user;
-                        $rootScope.userName = data.user.userName;
-                        localStorage.userId = $rootScope.userId;
-                        if (next.templateUrl === "/templates/login.html?ver=" + date)
-                        {
-                          $location.path('/home');
-                        }
-                      }
-                    }
-                    else { // user not found, refer to login
-                      $rootScope.userId = -1;
-                      $location.path('/login');
-                    }
-                  })
-              }
-              else { // user not found, refer to login
-                $rootScope.userId = -1;
-                $location.path('/login');
-              }
-            }
-            else {
-              $location.path("/login");
-            }
+             $rootScope.userId = -1;
+             $location.path('/login');
           }
         }
       });
