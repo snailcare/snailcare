@@ -32,7 +32,6 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
               $rootScope.user = data.name;
               $state.go('app.login');
               localStorage.userId = $rootScope.userId;
-              $rootScope.initTasks();
             }
             else {
               $rootScope.alertPopup("Incorrect Username or Password");

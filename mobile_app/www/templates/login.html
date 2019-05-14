@@ -22,7 +22,8 @@
       </form>
       </div>
       <div style="padding:10%" ng-show="userId && userId !== -1">
-        <h2 style="color:#fff">Hello {{user.userName}}!</h2><br/>
+        <h2 style="color: dimgray">Welcome</h2>
+		<h2 class="capitalize" style="color: dimgray">{{user}}</h2><br/><br/>
         <button class="button button-block button-assertive" ng-click="logout()">Logout</button>
       </div>
     </div>

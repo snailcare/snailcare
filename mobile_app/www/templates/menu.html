@@ -7,6 +7,7 @@
       <ion-nav-buttons side="left">
         <button ng-show="userId !== -1" class="button button-icon button-clear ion-navicon" menu-toggle="left">
         </button>
+		<span>&nbsp;</span>
       </ion-nav-buttons>
 
       <ion-nav-buttons side="right">
@@ -23,16 +24,13 @@
     <ion-content>
       <ion-list>
         <ion-item menu-close href="#/app/taskSelection">
-          <img src="img/interface.png" style="vertical-align:-6px;padding-right:3px;"/> test
+          <img src="img/interface.png" style="vertical-align:-6px;padding-right:3px;"/> New Appointment
         </ion-item>
         <ion-item menu-close href="#/app/start">
-          <img src="img/free-weigh.png" style="vertical-align:-6px;padding-right:3px;"/> test
+          <img src="img/free-weigh.png" style="vertical-align:-6px;padding-right:3px;"/> Next Appointments
         </ion-item>
 		<ion-item menu-close ng-click="initMyWeights()">
-          <img src="img/avatar.png" style="vertical-align:-6px;padding-right:3px;"/> test
-        </ion-item>
-        <ion-item menu-close href="#/app/settings">
-          <img src="img/settings.png" style="vertical-align:-6px;padding-right:3px;"/> Settings
+          <img src="img/avatar.png" style="vertical-align:-6px;padding-right:3px;"/> Previous Appointments
         </ion-item>
         <ion-item menu-close href="#/app/about">
           <img src="img/about-us.png" style="vertical-align:-6px;padding-right:3px;"/> About
