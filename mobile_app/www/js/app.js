@@ -33,7 +33,34 @@ angular.module('snailcareapp', ['ionic', 'snailcareapp.controllers', 'snailcarea
           }
         },
         controller: 'AppCtrl'
-      })      
+      })
+	  .state('app.newAppointment', {
+        url: '/newAppointment',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/newAppointment.html'
+          }
+        },
+        controller: 'AppCtrl'
+      })
+	  .state('app.nextAppointments', {
+        url: '/nextAppointments',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/nextAppointments.html'
+          }
+        },
+        controller: 'AppCtrl'
+      })
+	  .state('app.previousAppointments', {
+        url: '/previousAppointments',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/previousAppointments.html'
+          }
+        },
+        controller: 'AppCtrl'
+      })     
       .state('app.about', {
         url: '/about',
         views: {
