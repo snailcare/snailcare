@@ -11,19 +11,35 @@ router.use(function (req, res, next) {
 	next();
 });
 
-//TODO: change to POST
-router.get('/login', function(req, res){
-	logger.info('route: /login');
-	//var id = req.body.id;
-	//var password = req.body.password;	
-	var id = 'aaa';
-	var password = '1234';	
-	appointments.login(id, password).done(function(data){
-		req.session.id = (data) ? id : undefined;
-		res.json({status: true, is_exists: data});
+router.post('/get_appointments', function(req, res){
+	logger.info('route: /get_appointments');	
+	if (!req.session.name){
+		res.json({status: false, error: "Session is empty"});
+		return;
+	}
+	appointments.getAppointments().done(function(data){		
+		res.json({status: true, data: data});
 	},function(e){
 		res.json({status: false, error: e});
 	});	
+});
+
+router.post('/remove_appointment', function(req, res){
+	logger.info('route: /remove_appointment');
+	if (!req.session.name){
+		res.json({status: false, error: "Session is empty"});
+		return;
+	}
+	var staffId = req.body.staffId;
+	var date = req.body.date;
+	var hour = req.body.hour;
+	var id = req.body.id;	
+	console.log(staffId + " " + date + " " + hour + " "  + id)
+	appointments.removeAppointment(staffId, date, hour, id).done(function(data){		
+		res.json({status: true, data: data});
+	},function(e){
+		res.json({status: false, error: e});
+	});			
 });
 
 module.exports = router;

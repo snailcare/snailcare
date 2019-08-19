@@ -45,6 +45,16 @@
 		});
 	  },
 	  
+	  getAppointments: function () {
+		return $http({ // ajax http call
+		  method: 'POST',
+		  url: serverUrl + 'appointments/get_appointments',
+		  cache: false,
+		  data: {				
+		  }
+		});
+	  },
+	  
 	  getStaffs: function () {
 		return $http({ // ajax http call
 		  method: 'POST',
@@ -150,6 +160,20 @@
 			phoneNumber: data.newPhoneNumber,
 			address: data.newAddress,
 			email: data.newEmail
+          }
+        });
+      },
+	  
+	  removeAppointment: function (staffId, date, hour, id) {
+        return $http({ // ajax http call
+          method: 'POST',
+          url: serverUrl + 'appointments/remove_appointment',
+          cache: false,
+          data: {
+			staffId: staffId,
+			date: date,
+			hour: hour,
+            id: id         
           }
         });
       },

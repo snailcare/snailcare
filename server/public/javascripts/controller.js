@@ -113,6 +113,20 @@
         $rootScope.layout.loading = false;
       };
 	  
+	  mCtrl.initAppointments = function () {
+        $rootScope.layout.loading = true;
+		mCtrl.restEditMode();
+        try {
+          Factory.getAppointments().success(function (data) {
+			  mCtrl.appointments = (data.status) ? data.data : [];
+		  });
+        }
+        catch (e) {
+          console.log(e);
+        }
+        $rootScope.layout.loading = false;
+      };
+	  
 	  mCtrl.initStaffs = function () {
         $rootScope.layout.loading = true;
 		mCtrl.restEditMode();
@@ -315,6 +329,35 @@
           .error(function (e) {
             $rootScope.formData.successMsg = null;
             $rootScope.formData.errMsg = "Error removing client";
+            console.log(e);
+          });
+      };
+	  
+	  mCtrl.removeAppointment = function (index) {		
+		var staffId = mCtrl.appointments[index].staff_id;
+		var date = mCtrl.appointments[index].date;
+		var hour = mCtrl.appointments[index].hour;
+		var id = mCtrl.appointments[index].id;
+        Factory.removeAppointment(staffId, date, hour, id)
+          .success(function (data) {
+            if (data.status) {
+              $rootScope.formData.errMsg = null;
+              $rootScope.formData = {};
+              $rootScope.formData.successMsg = "Successfully Removed";
+              try {
+                mCtrl.appointments.splice(index, 1);
+              }
+              catch (e) {
+              }
+            }
+            else {
+              $rootScope.formData.successMsg = null;
+              $rootScope.formData.errMsg = "Error removing appointment";
+            }
+          })
+          .error(function (e) {
+            $rootScope.formData.successMsg = null;
+            $rootScope.formData.errMsg = "Error removing appointment";
             console.log(e);
           });
       };

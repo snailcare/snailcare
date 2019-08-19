@@ -83,6 +83,12 @@ var app = (function () {
 	  .when('/Staff/list', {
         templateUrl: './templates/Staff/list.html'
       })
+	  .when('/Appointments/list', {
+        templateUrl: './templates/Appointments/list.html'
+      })
+	  .when('/Appointments/schedule', {
+        templateUrl: './templates/Appointments/schedule.html'
+      })
 	  .when('/analytics', {
         templateUrl: './templates/Analytics/analytics.html'
       })

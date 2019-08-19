@@ -195,15 +195,65 @@ module.exports = {
 	
 	AppointmentsFunctions: {
 
-        getUser: function(id, password) {
+        getAppointments: function(id, password) {
            
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
-					query = `select id from snailcare.person where id = '${id}' and password = '${password}' limit 1`;
+					query = `
+		select 
+			queue.staff_id, queue.date, queue.hour, queue_status.name as status, queue.id, 
+			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
+			to_char(to_timestamp(queue.date || '_' || queue.hour, 'YYYYMMDD_hh'), 'YYYY-MM-DD hh:00:00') as "fullDate"
+		from snailcare.queue queue 
+			join snailcare.queue_status queue_status on queue.status = queue_status.code		 
+					join snailcare.staff staff on queue.staff_id = staff.id
+						join snailcare.branch branch on staff.branch = branch.code
+							join snailcare.profession profession on staff.profession = profession.code
+		where queue.id is not null`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {								
 						client.release()
 						resolve(res.rows);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
+		
+		isExists: function(staffId, date, hour, id) {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `select count(1) as result from snailcare.queue where staff_id = '${staffId}' and date = ${date} and hour = ${hour} and id = '${id}'`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {	
+						client.release();
+						logger.info(res.rows[0])
+						resolve(res.rows[0]);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
+		
+		removeAppointment: function(staffId, date, hour, id) {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `update snailcare.queue set id = null where staff_id = '${staffId}' and date = ${date} and hour = ${hour} and id = '${id}'`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {	
+						client.release();
+						logger.info(res.rows[0])
+						resolve(res.rows[0]);
 					})
 					.catch(e => {						
 						client.release();						
