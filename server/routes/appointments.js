@@ -42,4 +42,17 @@ router.post('/remove_appointment', function(req, res){
 	});			
 });
 
+router.post('/get_previous_appointments', function(req, res){
+	logger.info('route: /get_previous_appointments');	
+	if (!req.session.name){
+		res.json({status: false, error: "Session is empty"});
+		return;
+	}
+	appointments.getPreviousAppointments().done(function(data){		
+		res.json({status: true, data: data});
+	},function(e){
+		res.json({status: false, error: e});
+	});	
+});
+
 module.exports = router;

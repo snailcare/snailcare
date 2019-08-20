@@ -195,7 +195,7 @@ module.exports = {
 	
 	AppointmentsFunctions: {
 
-        getAppointments: function(id, password) {
+        getAppointments: function() {
            
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
@@ -209,7 +209,9 @@ module.exports = {
 					join snailcare.staff staff on queue.staff_id = staff.id
 						join snailcare.branch branch on staff.branch = branch.code
 							join snailcare.profession profession on staff.profession = profession.code
-		where queue.id is not null`;
+		where 
+			queue.id is not null and
+			queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {								
 						client.release()
@@ -254,6 +256,37 @@ module.exports = {
 						client.release();
 						logger.info(res.rows[0])
 						resolve(res.rows[0]);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
+		
+		getPreviousAppointments: function() {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `
+		select 
+			queue.staff_id, queue.date, queue.hour, queue_status.name as status, queue.id, 
+			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
+			to_char(to_timestamp(queue.date || '_' || queue.hour, 'YYYYMMDD_hh'), 'YYYY-MM-DD hh:00:00') as "fullDate"
+		from snailcare.queue queue 
+			join snailcare.queue_status queue_status on queue.status = queue_status.code		 
+					join snailcare.staff staff on queue.staff_id = staff.id
+						join snailcare.branch branch on staff.branch = branch.code
+							join snailcare.profession profession on staff.profession = profession.code
+		where 
+			queue.id is not null and
+			queue.date < cast(to_char(current_date, 'YYYYMMDD') as int)`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {								
+						client.release()
+						resolve(res.rows);
 					})
 					.catch(e => {						
 						client.release();						

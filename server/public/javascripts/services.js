@@ -55,6 +55,16 @@
 		});
 	  },
 	  
+	  getPreviousAppointments: function () {
+		return $http({ // ajax http call
+		  method: 'POST',
+		  url: serverUrl + 'appointments/get_previous_appointments',
+		  cache: false,
+		  data: {				
+		  }
+		});
+	  },
+	  
 	  getStaffs: function () {
 		return $http({ // ajax http call
 		  method: 'POST',

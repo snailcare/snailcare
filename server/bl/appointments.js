@@ -45,6 +45,19 @@ module.exports = {
 			});		
 			
 		});			
+	},
+	
+	getPreviousAppointments: function() {	
+	
+		return new Promise(function(resolve, reject) {			
+			db.AppointmentsFunctions.getPreviousAppointments()
+				.done(function(data){
+					resolve(data);
+				},function(e){
+					reject(e);
+			});
+		});
+		
 	}
 	
 };

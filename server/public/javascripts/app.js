@@ -86,6 +86,9 @@ var app = (function () {
 	  .when('/Appointments/list', {
         templateUrl: './templates/Appointments/list.html'
       })
+	  .when('/Appointments/list_prev', {
+        templateUrl: './templates/Appointments/list_prev.html'
+      })
 	  .when('/Appointments/schedule', {
         templateUrl: './templates/Appointments/schedule.html'
       })

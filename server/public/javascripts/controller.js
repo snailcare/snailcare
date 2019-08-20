@@ -127,6 +127,20 @@
         $rootScope.layout.loading = false;
       };
 	  
+	  mCtrl.initPreviousAppointments = function () {
+        $rootScope.layout.loading = true;
+		mCtrl.restEditMode();
+        try {
+          Factory.getPreviousAppointments().success(function (data) {
+			  mCtrl.prevAppointments = (data.status) ? data.data : [];
+		  });
+        }
+        catch (e) {
+          console.log(e);
+        }
+        $rootScope.layout.loading = false;
+      };
+	  
 	  mCtrl.initStaffs = function () {
         $rootScope.layout.loading = true;
 		mCtrl.restEditMode();
