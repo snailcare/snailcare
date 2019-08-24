@@ -127,6 +127,70 @@
         $rootScope.layout.loading = false;
       };
 	  
+	  mCtrl.initScheduleAppointment = function () {
+        $rootScope.layout.loading = true;
+		mCtrl.restEditMode();
+        try {
+          Factory.getNextFreeAppointments().success(function (data) {
+			  mCtrl.appointments = (data.status) ? data.data : [];
+				console.log(mCtrl.appointments)
+			  Factory.getClients().success(function (data) {
+				  mCtrl.clients = (data.status) ? data.data : [];
+				  Factory.getBranches().success(function (data) {
+					  mCtrl.branches = (data.status) ? data.data : [];
+					  Factory.getProfessions().success(function (data) {
+						  mCtrl.professions = (data.status) ? data.data : [];
+						  Factory.getStaffs().success(function (data) {
+							  mCtrl.staffs = (data.status) ? data.data : [];
+							  console.log(mCtrl.staffs)
+							  Factory.getAreas().success(function (data) {
+								  mCtrl.areas = (data.status) ? data.data : [];
+							  });
+						  });			  
+					  });
+				  });
+			  });
+		  });
+        }
+        catch (e) {
+          console.log(e);
+        }
+        $rootScope.layout.loading = false;
+      };
+	  
+	  mCtrl.scheduleAppointment = function () {
+        var formData = $rootScope.formData;
+		if (formData && formData.client && formData.area && formData.branch && 
+			formData.profession && formData.staff && formData.date && formData.hour) {
+          Factory.scheduleAppointment(formData)
+            .success(function (data) {				
+              if (data.status) {
+				if (data.data && data.data.error && data.data.error === "already_exists") {
+					$rootScope.formData.successMsg = null;
+					$rootScope.formData.errMsg = "appointment already has been scheduled";
+				} else {
+					$rootScope.formData.errMsg = null;
+					$rootScope.formData = {};
+					$rootScope.formData.successMsg = "Successfully Scheduled";
+				}
+              }
+              else {
+                $rootScope.formData.successMsg = null;
+                $rootScope.formData.errMsg = "Error schedule an appointment";
+              }
+            })
+            .error(function (e) {
+              $rootScope.formData.successMsg = null;
+              $rootScope.formData.errMsg = "Error schedule an appointment";
+              console.log(e);
+            })
+        }
+        else {
+          $rootScope.formData.successMsg = null;
+          $rootScope.formData.errMsg = "Please fill all necessary fields";
+        }
+      };
+	  
 	  mCtrl.initPreviousAppointments = function () {
         $rootScope.layout.loading = true;
 		mCtrl.restEditMode();
@@ -192,7 +256,7 @@
               }
               else {
                 $rootScope.formData.successMsg = null;
-                $rootScope.formData.errMsg = "Error adding new user";
+                $rootScope.formData.errMsg = "Error adding new branch";
               }
             })
             .error(function (e) {

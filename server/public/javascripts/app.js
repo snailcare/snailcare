@@ -1,7 +1,7 @@
 var app = (function () {
 
   // create app module
-  var app = angular.module('app', ['ngRoute']);
+  var app = angular.module('app', ['ngRoute', 'ui.filters']);
 
   // app configuration
   app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {

@@ -65,6 +65,16 @@
 		});
 	  },
 	  
+	  getNextFreeAppointments: function () {
+		return $http({ // ajax http call
+		  method: 'POST',
+		  url: serverUrl + 'appointments/get_next_free_appointments',
+		  cache: false,
+		  data: {				
+		  }
+		});
+	  },
+	  
 	  getStaffs: function () {
 		return $http({ // ajax http call
 		  method: 'POST',
@@ -232,6 +242,18 @@
 			personalInfo: data.personalInfo,
 			branch: data.branch,
 			profession: data.profession
+          }
+        });
+      },
+	  
+	  scheduleAppointment: function (data) {
+        return $http({ // ajax http call
+          method: 'POST',
+          url: serverUrl + 'appointments/schedule_appointment',
+          cache: false,
+          data: {
+            branchName: data.branchName,
+            areaCode: data.areaCode
           }
         });
       }

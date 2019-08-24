@@ -17,6 +17,19 @@ module.exports = {
 		
 	},
 	
+	getNextFreeAppointments: function() {	
+	
+		return new Promise(function(resolve, reject) {			
+			db.AppointmentsFunctions.getNextFreeAppointments()
+				.done(function(data){
+					resolve(data);
+				},function(e){
+					reject(e);
+			});
+		});
+		
+	},
+	
 	removeAppointment: function(staffId, date, hour, id) {	
 	
 		return new Promise(function(resolve, reject) {	

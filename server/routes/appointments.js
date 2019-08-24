@@ -24,6 +24,19 @@ router.post('/get_appointments', function(req, res){
 	});	
 });
 
+router.post('/get_next_free_appointments', function(req, res){
+	logger.info('route: /get_next_free_appointments');	
+	if (!req.session.name){
+		res.json({status: false, error: "Session is empty"});
+		return;
+	}
+	appointments.getNextFreeAppointments().done(function(data){		
+		res.json({status: true, data: data});
+	},function(e){
+		res.json({status: false, error: e});
+	});	
+});
+
 router.post('/remove_appointment', function(req, res){
 	logger.info('route: /remove_appointment');
 	if (!req.session.name){
