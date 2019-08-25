@@ -70,6 +70,21 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
     };
 	
 	/**
+     * logout :: function
+     * description: Logs out the current user
+     */
+    $scope.initPreviousAppointments = function () {
+	  
+	  AppFactory.getPreviousAppointmentsById($rootScope.userId)
+          .success(function (data) {
+			console.log(data);
+          })
+          .error(function (e) {
+            console.error(e);
+          });      
+    };
+	
+	/**
      * alertPopup :: function
      * description: Generic function for Ionic Alert Popup
      */

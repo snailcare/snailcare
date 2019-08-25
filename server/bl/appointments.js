@@ -73,6 +73,19 @@ module.exports = {
 		
 	},
 	
+	getPreviousAppointmentsById: function(id) {	
+	
+		return new Promise(function(resolve, reject) {			
+			db.AppointmentsFunctions.getPreviousAppointmentsById(id)
+				.done(function(data){
+					resolve(data);
+				},function(e){
+					reject(e);
+			});
+		});
+		
+	},
+	
 	scheduleAppointment: function(staffId, date, hour, clientId) {	
 	
 		return new Promise(function(resolve, reject) {	
