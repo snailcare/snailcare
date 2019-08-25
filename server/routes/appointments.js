@@ -46,14 +46,31 @@ router.post('/remove_appointment', function(req, res){
 	var staffId = req.body.staffId;
 	var date = req.body.date;
 	var hour = req.body.hour;
-	var id = req.body.id;	
-	console.log(staffId + " " + date + " " + hour + " "  + id)
+	var id = req.body.id;
 	appointments.removeAppointment(staffId, date, hour, id).done(function(data){		
 		res.json({status: true, data: data});
 	},function(e){
 		res.json({status: false, error: e});
 	});			
 });
+
+router.post('/schedule_appointment', function(req, res){
+	logger.info('route: /schedule_appointment');
+	if (!req.session.name){
+		res.json({status: false, error: "Session is empty"});
+		return;
+	}
+	var staffId = req.body.staffId;
+	var date = req.body.date;
+	var hour = req.body.hour;
+	var clientId = req.body.clientId;
+	appointments.scheduleAppointment(staffId, date, hour, clientId).done(function(data){		
+		res.json({status: true, data: data});
+	},function(e){
+		res.json({status: false, error: e});
+	});			
+});
+
 
 router.post('/get_previous_appointments', function(req, res){
 	logger.info('route: /get_previous_appointments');	

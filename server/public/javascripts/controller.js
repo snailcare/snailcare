@@ -167,11 +167,15 @@
               if (data.status) {
 				if (data.data && data.data.error && data.data.error === "already_exists") {
 					$rootScope.formData.successMsg = null;
-					$rootScope.formData.errMsg = "appointment already has been scheduled";
+					$rootScope.formData.errMsg = "appointment already had been scheduled";
+				} else if (data.data && data.data.error && data.data.error === "something_went_wrong") {
+					$rootScope.formData.successMsg = null;
+					$rootScope.formData.errMsg = "something went wrong";
 				} else {
 					$rootScope.formData.errMsg = null;
 					$rootScope.formData = {};
 					$rootScope.formData.successMsg = "Successfully Scheduled";
+					 mCtrl.initScheduleAppointment();
 				}
               }
               else {

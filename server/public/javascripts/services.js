@@ -252,8 +252,10 @@
           url: serverUrl + 'appointments/schedule_appointment',
           cache: false,
           data: {
-            branchName: data.branchName,
-            areaCode: data.areaCode
+			clientId: data.client,
+			staffId: data.staff,
+			date: data.date,
+			hour: data.hour
           }
         });
       }
