@@ -30,8 +30,8 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
             if (data.status && data.is_exists) {
               $rootScope.userId = data.id;
               $rootScope.user = data.name;
-              $state.go('app.login');
-              localStorage.userId = $rootScope.userId;
+			  localStorage.userId = $rootScope.userId;
+              $state.go('app.login');              
             }
             else {
               $rootScope.alertPopup("Incorrect Username or Password");
