@@ -13,7 +13,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 	  $scope.loginData = {};
       $rootScope.user = null;
       $rootScope.userId = -1;
-
+	  $scope.initPreviousAppointments();
     };
 
     /**
@@ -70,14 +70,14 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
     };
 	
 	/**
-     * logout :: function
-     * description: Logs out the current user
+     * initPreviousAppointments :: function
+     * description: load previous appointments
      */
     $scope.initPreviousAppointments = function () {
 	  
 	  AppFactory.getPreviousAppointmentsById($rootScope.userId)
           .success(function (data) {
-			console.log(data);
+			$rootScope.previousAppointments = data;
           })
           .error(function (e) {
             console.error(e);

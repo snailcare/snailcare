@@ -244,7 +244,9 @@ module.exports = {
 							join snailcare.profession profession on staff.profession = profession.code
 		where 
 			queue.id is null and
-			queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
+			queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)
+		order by 
+			queue.date, queue.hour`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {								
 						client.release()
@@ -376,7 +378,9 @@ module.exports = {
 							join snailcare.profession profession on staff.profession = profession.code
 		where 
 			queue.id is not null and
-			queue.date < cast(to_char(current_date, 'YYYYMMDD') as int)`;
+			queue.date < cast(to_char(current_date, 'YYYYMMDD') as int)
+		order by 
+			queue.date desc, queue.hour desc`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {								
 						client.release()
@@ -408,7 +412,9 @@ module.exports = {
 							join snailcare.profession profession on staff.profession = profession.code
 		where 
 			queue.id = '{id}' and
-			queue.date < cast(to_char(current_date, 'YYYYMMDD') as int)`;
+			queue.date < cast(to_char(current_date, 'YYYYMMDD') as int)
+		order by 
+			queue.date desc, queue.hour desc`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {								
 						client.release()
