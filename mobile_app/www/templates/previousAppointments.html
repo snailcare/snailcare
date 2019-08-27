@@ -3,10 +3,11 @@
     <div class="container">
 	  <div ng-show="loading" class="loading-animation"><ion-spinner></ion-spinner></div>
          <div ng-show="previousAppointments.length > 0" ng-hide="loading">
-            <b>Select an appointment:</b><br/><br/>
-            <div class="row item" ng-repeat="previousAppointment in previousAppointments  | filter:search_query" ng-click="selectWeight($index)">
-               <div class="col">{{previousAppointment.date}}</div>
-               <div class="col">{{previousAppointment.weight}}</div>
+            <b>Previous Appointments:</b><br/><br/>
+            <div class="row item" ng-repeat="previousAppointment in previousAppointments  | filter:search_query">
+               <div class="col">{{previousAppointment.fullDate}}</div>
+               <div class="col">{{previousAppointment.doctor}}</div>
+			   <div class="col">{{previousAppointment.profession}}</div>
             </div>
          </div>
          <div ng-show="previousAppointments.length == 0 && !loading">

@@ -74,7 +74,6 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
     $scope.initPreviousAppointments = function () {
 	  AppFactory.getPreviousAppointmentsById($rootScope.userId)
           .success(function (data) {
-			console.log(data); // to_remove
 			$rootScope.previousAppointments = data.data;
           })
           .error(function (e) {
