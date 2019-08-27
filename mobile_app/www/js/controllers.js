@@ -97,6 +97,14 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
     };
 	
 	/**
+     * removeAppointment :: function
+     * description: remove an appointment
+     */
+    $scope.removeAppointment = function (index) {
+	 console.log(index)    
+    };
+	
+	/**
      * alertPopup :: function
      * description: Generic function for Ionic Alert Popup
      */
