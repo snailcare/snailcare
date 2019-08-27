@@ -29,6 +29,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
               $rootScope.user = data.name;
 			  localStorage.userId = $rootScope.userId;			  
 			  $scope.initPreviousAppointments();
+			  $scope.initNextAppointments();
               $state.go('app.login');              
             }
             else {
@@ -75,6 +76,20 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 	  AppFactory.getPreviousAppointmentsById($rootScope.userId)
           .success(function (data) {
 			$rootScope.previousAppointments = data.data;
+          })
+          .error(function (e) {
+            console.error(e);
+          });      
+    };
+	
+	/**
+     * initNextAppointments :: function
+     * description: load next appointments
+     */
+    $scope.initNextAppointments = function () {
+	  AppFactory.getNextAppointmentsById($rootScope.userId)
+          .success(function (data) {
+			$rootScope.nextAppointments = data.data;
           })
           .error(function (e) {
             console.error(e);

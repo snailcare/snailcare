@@ -427,7 +427,39 @@ module.exports = {
 				})
             });
 			
-        }
+        },
+		
+		getNextAppointmentsById: function(id) {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `
+		select 
+			queue.staff_id, queue.date, queue.hour, queue_status.name as status, queue.id, 
+			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
+			to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00') as "fullDate",
+			case when queue.hour > 23 then 'stand_by_' || cast ((queue.hour - 24 + 1) as varchar(5)) else cast (queue.hour as varchar(5)) end as hour_desc
+		from snailcare.queue queue 
+			join snailcare.queue_status queue_status on queue.status = queue_status.code		 
+					join snailcare.staff staff on queue.staff_id = staff.id
+						join snailcare.branch branch on staff.branch = branch.code
+							join snailcare.profession profession on staff.profession = profession.code
+		where 
+			queue.id = '${id}' and
+			queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {								
+						client.release()
+						resolve(res.rows);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
 		
     },
 	

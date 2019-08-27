@@ -1,7 +1,18 @@
 <ion-view view-title="Snail snail snail">
   <ion-content>
     <div class="container">
-      <small><strong>Snailcare Project V 1.0</strong></small>
+	  <div ng-show="loading" class="loading-animation"><ion-spinner></ion-spinner></div>
+         <div ng-show="nextAppointments.length > 0" ng-hide="loading">
+            <b>Next Appointments:</b><br/><br/>
+            <div class="row item" ng-repeat="nextAppointment in nextAppointments  | filter:search_query">
+               <div class="col">{{nextAppointment.fullDate}}</div>
+               <div class="col">{{nextAppointment.doctor}}</div>
+			   <div class="col">{{nextAppointment.profession}}</div>
+            </div>
+         </div>
+         <div ng-show="nextAppointments.length == 0 && !loading">
+            <b>There are no next appointments.</b>
+         </div>
     </div>
   </ion-content>
 </ion-view>

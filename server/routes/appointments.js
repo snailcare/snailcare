@@ -75,5 +75,13 @@ router.post('/get_previous_appointments_by_id', function(req, res){
 	});	
 });
 
+router.post('/get_next_appointments_by_id', function(req, res){
+	logger.info('route: /get_next_appointments_by_id');	
+	appointments.getNextAppointmentsById(id).done(function(data){		
+		res.json({status: true, data: data});
+	},function(e){
+		res.json({status: false, error: e});
+	});	
+});
 
 module.exports = router;

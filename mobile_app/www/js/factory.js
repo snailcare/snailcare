@@ -32,6 +32,17 @@ angular.module('snailcareapp.factory', []).factory('AppFactory', function($http)
 					id: id
 				}
 			});
+		},
+		
+		getNextAppointmentsById: function(id) {
+			return $http({
+				method: 'POST',
+				url: 'https://snailcare.herokuapp.com/appointments/get_next_appointments_by_id',
+				cache: false,
+				data: {
+					id: id
+				}
+			});
 		}
 	  
 	}
