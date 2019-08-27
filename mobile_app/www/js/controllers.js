@@ -6,14 +6,11 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
      * initApp :: function
      * description: Main function that initializes the app
      */
-    $scope.initApp = function () {
-
-      // defaults and inits
+    $scope.initApp = function () {  // defaults and inits
       $scope.socket = {};
 	  $scope.loginData = {};
       $rootScope.user = null;
       $rootScope.userId = -1;
-	  $scope.initPreviousAppointments();
     };
 
     /**
@@ -26,11 +23,12 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
       var password = $scope.loginData.password;
       if (userId && password && userId.length > 0 && password.length > 0) {
         AppFactory.login(userId, password)
-          .success(function (data) {            
+          .success(function (data) {
             if (data.status && data.is_exists) {
               $rootScope.userId = data.id;
               $rootScope.user = data.name;
-			  localStorage.userId = $rootScope.userId;
+			  localStorage.userId = $rootScope.userId;			  
+			  $scope.initPreviousAppointments();
               $state.go('app.login');              
             }
             else {
@@ -74,10 +72,10 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
      * description: load previous appointments
      */
     $scope.initPreviousAppointments = function () {
-	  
 	  AppFactory.getPreviousAppointmentsById($rootScope.userId)
           .success(function (data) {
-			$rootScope.previousAppointments = data;
+			console.log(data); // to_remove
+			$rootScope.previousAppointments = data.data;
           })
           .error(function (e) {
             console.error(e);

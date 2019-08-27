@@ -411,7 +411,7 @@ module.exports = {
 						join snailcare.branch branch on staff.branch = branch.code
 							join snailcare.profession profession on staff.profession = profession.code
 		where 
-			queue.id = '{id}' and
+			queue.id = '${id}' and
 			queue.date < cast(to_char(current_date, 'YYYYMMDD') as int)
 		order by 
 			queue.date desc, queue.hour desc`;
