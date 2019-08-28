@@ -102,14 +102,36 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
      */
     $scope.removeAppointment = function (index) {
 	  
-	  AppFactory.removeAppointment($rootScope.nextAppointments[index])
-          .success(function (data) {
-			 $rootScope.nextAppointments.splice(index, 1);
-          })
-          .error(function (e) {
-            console.error(e);
-          }); 
-	  
+	  var myPopup = $ionicPopup.show({
+        template: 'Are You sure?',
+        title: 'About To Remove',
+        scope: $scope,
+        buttons: [
+          {text: 'Cancel'},
+          {
+            text: '<b>Remove</b>',
+            type: 'button-assertive',
+            onTap: function (e) {
+               AppFactory.removeAppointment($rootScope.nextAppointments[index])
+				  .success(function (data) {
+					 $rootScope.nextAppointments.splice(index, 1);
+				  })
+				  .error(function (e) {
+					console.error(e);
+				  }); 
+            }
+          }
+        ]
+      });
+
+      myPopup.then(function (res) {
+      
+      });
+
+      $timeout(function () {
+        myPopup.close(); //close the popup after 10 seconds for some reason
+      }, 10000);	 
+	
     };
 	
 	/**
