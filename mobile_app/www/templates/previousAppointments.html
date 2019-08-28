@@ -4,9 +4,8 @@
 	  <div ng-show="loading" class="loading-animation"><ion-spinner></ion-spinner></div>
          <div ng-show="previousAppointments.length > 0" ng-hide="loading">
             <b>Previous Appointments:</b><br/><br/>
-            <div style="text-align: left;" class="row item" ng-repeat="previousAppointment in previousAppointments  | filter:search_query">
+            <div ng-click="moreInfoPreviousAppointment($index)" class="row item" ng-repeat="previousAppointment in previousAppointments  | filter:search_query">
                <div class="col">{{previousAppointment.fullDate}}</div>
-               <div class="col">{{previousAppointment.doctor}}</div>
 			   <div class="col">{{previousAppointment.profession}}</div>
             </div>
          </div>

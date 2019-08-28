@@ -101,7 +101,113 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
      * description: remove an appointment
      */
     $scope.removeAppointment = function (index) {
-	 console.log(index)    
+	  
+	  AppFactory.removeAppointment($rootScope.nextAppointments[index])
+          .success(function (data) {
+			 $rootScope.nextAppointments.splice(index, 1);
+          })
+          .error(function (e) {
+            console.error(e);
+          }); 
+	  
+    };
+	
+	/**
+     * moreInfoNextAppointment :: function
+     * description: more information about the appointment
+     * @param index
+     */
+    $scope.moreInfoNextAppointment = function (index) {
+      navigator.vibrate(300);
+      var popUp = $ionicPopup.alert({
+        title: "More Information",
+        template: '<div></div>',
+        buttons: [{
+          text: 'OK',
+          type: 'button-assertive'
+        }]
+      });
+      popUp.then(function (res) {
+        // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+      document.getElementsByClassName("popup")[0].style.maxHeight = '100%';
+      document.getElementsByClassName("popup")[0].style.height = '400px';
+      document.getElementsByClassName("popup")[0].style.maxWidth = '100%';
+      document.getElementsByClassName("popup")[0].style.width = '300px';
+      document.getElementsByClassName("popup-body")[0].style.height = '100%';
+      setTimeout(function () {
+        var div = document.createElement("div");
+        div.setAttribute("id", "previousAppointmentPopUp");
+        div.style.height = '100%';
+		
+		var fullDate = $rootScope.previousAppointments[index]['fullDate'];
+		var branch = $rootScope.previousAppointments[index]['branch'];
+		var status = $rootScope.previousAppointments[index]['status'];
+		var doctor = $rootScope.previousAppointments[index]['doctor'];
+		var profession = $rootScope.previousAppointments[index]['profession'];
+		
+		div.innerText = `		
+		Date: ${fullDate}
+		
+		Status: ${status}
+		
+		Doctor Informatiom: ${doctor}
+		
+		Branch: ${branch}
+		
+		Profession: ${profession}
+		`
+        document.getElementsByClassName("popup-body")[0].appendChild(div);	
+      }, 0);
+    };
+	
+	/**
+     * moreInfoPreviousAppointment :: function
+     * description: more information about the appointment
+     * @param index
+     */
+    $scope.moreInfoPreviousAppointment = function (index) {
+      navigator.vibrate(300);
+      var popUp = $ionicPopup.alert({
+        title: "More Information",
+        template: '<div></div>',
+        buttons: [{
+          text: 'OK',
+          type: 'button-assertive'
+        }]
+      });
+      popUp.then(function (res) {
+        // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+      document.getElementsByClassName("popup")[0].style.maxHeight = '100%';
+      document.getElementsByClassName("popup")[0].style.height = '400px';
+      document.getElementsByClassName("popup")[0].style.maxWidth = '100%';
+      document.getElementsByClassName("popup")[0].style.width = '300px';
+      document.getElementsByClassName("popup-body")[0].style.height = '100%';
+      setTimeout(function () {
+        var div = document.createElement("div");
+        div.setAttribute("id", "previousAppointmentPopUp");
+        div.style.height = '100%';
+		
+		var fullDate = $rootScope.previousAppointments[index]['fullDate'];
+		var branch = $rootScope.previousAppointments[index]['branch'];
+		var status = $rootScope.previousAppointments[index]['status'];
+		var doctor = $rootScope.previousAppointments[index]['doctor'];
+		var profession = $rootScope.previousAppointments[index]['profession'];
+		
+		div.innerText = `		
+		Date: ${fullDate}
+		
+		Status: ${status}
+		
+		Doctor Informatiom: ${doctor}
+		
+		Branch: ${branch}
+		
+		Profession: ${profession}
+		`
+        document.getElementsByClassName("popup-body")[0].appendChild(div);       
+      }, 0);
     };
 	
 	/**

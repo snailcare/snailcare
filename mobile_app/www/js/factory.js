@@ -43,6 +43,20 @@ angular.module('snailcareapp.factory', []).factory('AppFactory', function($http)
 					id: id
 				}
 			});
+		},
+		
+		removeAppointment: function(data) {
+			return $http({
+				method: 'POST',
+				url: 'https://snailcare.herokuapp.com/appointments/remove_appointment',
+				cache: false,
+				data: {
+					staffId: data.staff_id,
+					date: data.date,
+					hour: data.hour,
+					id: data.id
+				}
+			});
 		}
 	  
 	}
