@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('snailcareapp', ['ionic', 'snailcareapp.controllers', 'snailcareapp.factory'])
+angular.module('snailcareapp', ['ionic', 'snailcareapp.controllers', 'snailcareapp.factory', 'ui.filters'])
 
   .run(function ($ionicPlatform,$rootScope,$state,AppFactory) {
     $ionicPlatform.ready(function () {

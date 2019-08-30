@@ -282,6 +282,14 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
     };
 	
 	/**
+     * scheduleAppointment :: function
+     * description: schedule an appointment
+     */
+    $rootScope.scheduleAppointment = function () {
+     console.log(123123)
+    };
+	
+	/**
      * alertPopup :: function
      * description: Generic function for Ionic Alert Popup
      */
