@@ -1,7 +1,7 @@
 angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 
   .controller('AppCtrl', function ($rootScope, $scope, $ionicModal, $ionicHistory, $ionicPopup, $timeout, $state, AppFactory, $ionicPlatform) {
-
+		
     /**
      * initApp :: function
      * description: Main function that initializes the app
@@ -9,6 +9,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
     $scope.initApp = function () {  // defaults and inits
       $scope.socket = {};
 	  $scope.loginData = {};
+	  $scope.formData = {};
       $rootScope.user = null;
       $rootScope.userId = -1;
     };
@@ -237,7 +238,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
      * initScheduleAppointment :: function
      * description: load next available appointments
      */
-    $rootScope.initScheduleAppointment = function () {
+    $scope.initScheduleAppointment = function () {
 		
       AppFactory.getNextFreeAppointments().success(function (data) {
 		  
@@ -285,8 +286,36 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
      * scheduleAppointment :: function
      * description: schedule an appointment
      */
-    $rootScope.scheduleAppointment = function () {
-     console.log(123123)
+    $scope.scheduleAppointment = function () {
+		var formData = $scope.formData;
+		if (formData && formData.area && formData.branch && 
+			formData.profession && formData.staff && formData.date && formData.hour) {
+		  formData.client = $rootScope.userId;
+          AppFactory.scheduleAppointment(formData)
+            .success(function (data) {				
+              if (data.status) {
+				if (data.data && data.data.error && data.data.error === "already_exists") {
+					$rootScope.alertPopup("appointment already had been scheduled");
+				} else if (data.data && data.data.error && data.data.error === "something_went_wrong") {
+					$rootScope.alertPopup("something went wrong");
+				} else {
+					$scope.formData = {};
+					$rootScope.alertPopup("Successfully Scheduled");
+					$scope.initScheduleAppointment();
+				}
+              }
+              else {
+                $rootScope.alertPopup("Error schedule an appointment");
+              }
+            })
+            .error(function (e) {
+			  console.log(e);
+              $rootScope.alertPopup("Error schedule an appointment");              
+            })
+        }
+        else {
+		  $rootScope.alertPopup("Please fill all necessary fields");
+        }
     };
 	
 	/**

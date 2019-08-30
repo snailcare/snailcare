@@ -112,6 +112,20 @@ angular.module('snailcareapp.factory', []).factory('AppFactory', function($http)
 					
 				}
 			});
+		},
+		
+		scheduleAppointment: function (data) {
+			return $http({ // ajax http call
+			  method: 'POST',
+			  url: 'https://snailcare.herokuapp.com/appointments/schedule_appointment',
+			  cache: false,
+			  data: {
+				clientId: data.client,
+				staffId: data.staff,
+				date: data.date,
+				hour: data.hour
+			  }
+			});
 		}
 	  
 	}
