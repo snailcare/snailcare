@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 let staffs = require('../bl/staffs');
 var logger = require('../logger');
-
+/*
 router.use(function (req, res, next) {	
 	if (!req.session.name){
 		res.json({status: false, error: "Session is empty"});
@@ -10,7 +10,7 @@ router.use(function (req, res, next) {
 	}	
 	next();
 });
-
+*/
 router.post('/get_professions', function(req, res){
 	logger.info('route: /get_professions');	
 	staffs.getProfessions().done(function(data){		

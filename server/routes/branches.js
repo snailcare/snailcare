@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 let branches = require('../bl/branches');
 var logger = require('../logger');
-
+/*
 router.use(function (req, res, next) {	
 	if (!req.session.name){
 		res.json({status: false, error: "Session is empty"});
@@ -10,7 +10,7 @@ router.use(function (req, res, next) {
 	}	
 	next();
 });
-
+*/
 router.post('/get_branches', function(req, res){
 	logger.info('route: /get_branches');	
 	branches.getBranches().done(function(data){		

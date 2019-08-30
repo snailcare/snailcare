@@ -57,6 +57,61 @@ angular.module('snailcareapp.factory', []).factory('AppFactory', function($http)
 					id: data.id
 				}
 			});
+		},
+		
+		getNextFreeAppointments: function(data) {
+			return $http({
+				method: 'POST',
+				url: 'https://snailcare.herokuapp.com/appointments/get_next_free_appointments',
+				cache: false,
+				data: {
+					
+				}
+			});
+		},
+		
+		getBranches: function(data) {
+			return $http({
+				method: 'POST',
+				url: 'https://snailcare.herokuapp.com/branches/get_branches',
+				cache: false,
+				data: {
+					
+				}
+			});
+		},
+		
+		getProfessions: function(data) {
+			return $http({
+				method: 'POST',
+				url: 'https://snailcare.herokuapp.com/staffs/get_professions',
+				cache: false,
+				data: {
+					
+				}
+			});
+		},
+		
+		getStaffs: function(data) {
+			return $http({
+				method: 'POST',
+				url: 'https://snailcare.herokuapp.com/staffs/get_staffs',
+				cache: false,
+				data: {
+					
+				}
+			});
+		},
+		
+		getAreas: function(data) {
+			return $http({
+				method: 'POST',
+				url: 'https://snailcare.herokuapp.com/area/get_areas',
+				cache: false,
+				data: {
+					
+				}
+			});
 		}
 	  
 	}

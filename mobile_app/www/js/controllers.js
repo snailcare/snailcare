@@ -30,6 +30,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 			  localStorage.userId = $rootScope.userId;			  
 			  $scope.initPreviousAppointments();
 			  $scope.initNextAppointments();
+			  $scope.initScheduleAppointment();
               $state.go('app.login');              
             }
             else {
@@ -230,6 +231,54 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 		`
         document.getElementsByClassName("popup-body")[0].appendChild(div);       
       }, 0);
+    };
+	
+	/**
+     * initScheduleAppointment :: function
+     * description: load next available appointments
+     */
+    $rootScope.initScheduleAppointment = function () {
+		
+      AppFactory.getNextFreeAppointments().success(function (data) {
+		  
+		 $rootScope.appointments = (data.status) ? data.data : [];
+		 
+		 AppFactory.getBranches().success(function (data) {
+			 
+			$rootScope.branches = (data.status) ? data.data : [];	
+			
+			AppFactory.getProfessions().success(function (data) {
+			 
+				$rootScope.professions = (data.status) ? data.data : [];	
+				
+				AppFactory.getStaffs().success(function (data) {
+			 
+					$rootScope.staffs = (data.status) ? data.data : [];	
+					
+					AppFactory.getAreas().success(function (data) {
+			 
+						$rootScope.areas = (data.status) ? data.data : [];	
+						
+					  }).error(function (e) {
+						console.error(e);
+					  });
+					
+				  }).error(function (e) {
+					console.error(e);
+				  });
+			  
+			  }).error(function (e) {
+				console.error(e);
+			  });
+		  
+		  }).error(function (e) {
+			console.error(e);
+		  });
+			  
+	  }).error(function (e) {
+		console.error(e);
+	  }); 	
+	  
     };
 	
 	/**
