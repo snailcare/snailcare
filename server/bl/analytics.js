@@ -15,6 +15,19 @@ module.exports = {
 			});
 		});
 		
+	},
+	
+	getSchedulePick: function() {	
+	
+		return new Promise(function(resolve, reject) {			
+			db.AnalyticsFunctions.getSchedulePick()
+				.done(function(data){
+					resolve(data);
+				},function(e){
+					reject(e);
+			});
+		});
+		
 	}
 	
 };

@@ -612,12 +612,337 @@
         try {
           Factory.getUsersAnalytics().success(function (data) {
 			  mCtrl.usersAnalytics = (data.status) ? data.data : [];
-			  console.log(usersAnalytics);
-		  });
-        }
-        catch (e) {
-          console.log(e);
-        }
+			  var lables = [];
+			  var usersNewData = [];
+			  var usersLeftData = [];
+			  for (i = 0; i < mCtrl.usersAnalytics.length; i++) {
+				  lables[i] = mCtrl.usersAnalytics[i].month.trim();
+				  usersNewData[i] = Number(mCtrl.usersAnalytics[i].users_new);
+				  usersLeftData[i] = Number(mCtrl.usersAnalytics[i].users_left);
+			  }			  
+			  var myChart = new Chart(document.getElementById("myChart"), {
+				"type": "line",
+				"data": {
+					"labels": lables,
+					"datasets": [{
+							"label": "New Users",
+							"data": usersNewData,
+							"fill": false,
+							"borderColor": "rgb(75, 192, 192)",
+							"lineTension": 0.1
+						},{
+							"label": "Abandoned Users",
+							"data": usersLeftData,
+							"fill": false,
+							"borderColor": "rgb(192, 93, 75)",
+							"lineTension": 0.1
+						}
+					]
+				},
+				"options": {}
+			});
+			
+			Factory.getSchedulePick().success(function (data) {
+			  mCtrl.schedulePick = (data.status) ? data.data : [];	
+			console.log(mCtrl.schedulePick);
+				
+			  var metrics = Array.from(new Array(24), (x,i) => []);
+			  
+			  for (i = 0; i < metrics.length; i++) {
+				  metrics[i] = Array.from(new Array(24), (x,i) => 0);
+			  }		
+			  
+			  for (i = 0; i < mCtrl.schedulePick.length; i++) {
+				  metrics[Number(mCtrl.schedulePick[i].hour)][Number(mCtrl.schedulePick[i].hour)] = Number(mCtrl.schedulePick[i].count) * 100;
+				
+				  metrics[Number(mCtrl.schedulePick[i].hour)][(Number(mCtrl.schedulePick[i].hour) + 1) % 24] = Number(mCtrl.schedulePick[i].count) * 100;		  
+				  
+			  }	
+				new Chart(document.getElementById("chartjs-3"), {
+								"type": "radar",
+								"data": {
+									"labels": ["00", "01", "02", "03", "04", "05", "06",
+										"07", "08", "09", "10", "11", "12",
+										"13", "14", "15", "16", "17", "18",
+										"19", "20", "21", "22", "23"],
+									"datasets": [{
+											"label": "00",
+											"data": metrics[0],
+											"fill": true,
+											"backgroundColor": "rgba(255, 99, 132, 0.2)",
+											"borderColor": "rgb(255, 99, 132)",
+											"pointBackgroundColor": "rgb(255, 99, 132)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(255, 99, 132)"
+										}, {
+											"label": "01",
+											"data": metrics[1],
+											"fill": true,
+											"backgroundColor": "rgba(54, 162, 235, 0.2)",
+											"borderColor": "rgb(54, 162, 235)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "02",
+											"data": metrics[2],
+											"fill": true,
+											"backgroundColor": "rgba(255, 255, 153, 0.2)",
+											"borderColor": "rgb(255, 255, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "03",
+											"data": metrics[3],
+											"fill": true,
+											"backgroundColor": "rgba(0, 204, 153, 0.2)",
+											"borderColor": "rgb(0, 204, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "04",
+											"data": metrics[4],
+											"fill": true,
+											"backgroundColor": "rgba(153, 0, 51, 0.2)",
+											"borderColor": "rgb(153, 0, 51)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "05",
+											"data": metrics[5],
+											"fill": true,
+											"backgroundColor": "rgba(255, 153, 0, 0.2)",
+											"borderColor": "rgb(255, 153, 0)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "06",
+											"data": metrics[6],
+											"fill": true,
+											"backgroundColor": "rgba(0, 102, 0, 0.2)",
+											"borderColor": "rgb(0, 102, 0)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "07",
+											"data": metrics[7],
+											"fill": true,
+											"backgroundColor": "rgba(0, 153, 153, 0.2)",
+											"borderColor": "rgb(0, 153, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "08",
+											"data": metrics[8],
+											"fill": true,
+											"backgroundColor": "rgba(0, 255, 0, 0.2)",
+											"borderColor": "rgb(0, 255, 0)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "rgb(0, 255, 0)",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "09",
+											"data": metrics[9],
+											"fill": true,
+											"backgroundColor": "rgba(54, 162, 235, 0.2)",
+											"borderColor": "rgb(54, 162, 235)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "10",
+											"data": metrics[10],
+											"fill": true,
+											"backgroundColor": "rgba(0, 153, 153, 0.2)",
+											"borderColor": "rgb(0, 153, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "11",
+											"data": metrics[11],
+											"fill": true,
+											"backgroundColor": "rgba(54, 162, 235, 0.2)",
+											"borderColor": "rgb(54, 162, 235)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "12",
+											"data": metrics[12],
+											"fill": true,
+											"backgroundColor": "rgba(54, 162, 235, 0.2)",
+											"borderColor": "rgb(54, 162, 235)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "13",
+											"data": metrics[13],
+											"fill": true,
+											"backgroundColor": "rgba(0, 153, 153, 0.2)",
+											"borderColor": "rgb(0, 153, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "14",
+											"data": metrics[14],
+											"fill": true,
+											"backgroundColor": "rgba(54, 162, 235, 0.2)",
+											"borderColor": "rgb(54, 162, 235)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "15",
+											"data": metrics[15],
+											"fill": true,
+											"backgroundColor": "rgba(0, 153, 153, 0.2)",
+											"borderColor": "rgb(0, 153, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "16",
+											"data": metrics[16],
+											"fill": true,
+											"backgroundColor": "rgba(0, 153, 153, 0.2)",
+											"borderColor": "rgb(0, 153, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "17",
+											"data": metrics[17],
+											"fill": true,
+											"backgroundColor": "rgba(0, 153, 153, 0.2)",
+											"borderColor": "rgb(0, 153, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "18",
+											"data": metrics[18],
+											"fill": true,
+											"backgroundColor": "rgba(54, 162, 235, 0.2)",
+											"borderColor": "rgb(54, 162, 235)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "19",
+											"data": metrics[19],
+											"fill": true,
+											"backgroundColor": "rgba(0, 153, 153, 0.2)",
+											"borderColor": "rgb(0, 153, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "20",
+											"data": metrics[20],
+											"fill": true,
+											"backgroundColor": "rgba(54, 162, 235, 0.2)",
+											"borderColor": "rgb(54, 162, 235)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "21",
+											"data": metrics[21],
+											"fill": true,
+											"backgroundColor": "rgba(0, 153, 153, 0.2)",
+											"borderColor": "rgb(0, 153, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "22",
+											"data": metrics[22],
+											"fill": true,
+											"backgroundColor": "rgba(54, 162, 235, 0.2)",
+											"borderColor": "rgb(54, 162, 235)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}, {
+											"label": "23",
+											"data": metrics[23],
+											"fill": true,
+											"backgroundColor": "rgba(0, 153, 153, 0.2)",
+											"borderColor": "rgb(0, 153, 153)",
+											"pointBackgroundColor": "rgb(54, 162, 235)",
+											"pointBorderColor": "#fff",
+											"pointHoverBackgroundColor": "#fff",
+											"pointHoverBorderColor": "rgb(54, 162, 235)"
+										}
+									]
+								},
+								"options": {
+									"elements": {
+										"line": {
+											"tension": 0,
+											"borderWidth": 3
+										}
+									}
+								}
+							});		
+							
+							 Factory.getPreviousAppointments().success(function (data) {
+								  mCtrl.prevAppointments = (data.status) ? data.data : [];
+								  
+								  
+								  new Chart(document.getElementById("chartjs-5"), {
+									"type": "polarArea",
+									"data": {
+										"labels": ["Red", "Green", "Yellow", "Grey", "Blue"],
+										"datasets": [{
+												"label": "My First Dataset",
+												"data": [11, 16, 7, 3, 14],
+												"backgroundColor": ["rgb(255, 99, 132)", "rgb(75, 192, 192)", "rgb(255, 205, 86)", "rgb(201, 203, 207)", "rgb(54, 162, 235)"]
+											}
+										]
+									}
+								});
+						  });
+					});
+							
+							
+			  });
+			}
+			catch (e) {
+			  console.log(e);
+			}
         $rootScope.layout.loading = false;
       };
 	  

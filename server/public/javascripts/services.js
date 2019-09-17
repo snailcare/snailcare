@@ -270,6 +270,16 @@
 		});
 	  },
 	  
+	  getSchedulePick: function () {
+		return $http({ // ajax http call
+		  method: 'POST',
+		  url: serverUrl + 'analytics/get_schedule_pick',
+		  cache: false,
+		  data: {				
+		  }
+		});
+	  }
+	  
     }
   }]);
 })(app || {});

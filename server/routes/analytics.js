@@ -20,4 +20,13 @@ router.post('/get_users_analytics', function(req, res){
 	});		
 });
 
+router.post('/get_schedule_pick', function(req, res){
+	logger.info('route: /get_schedule_pick');		
+	analytics.getSchedulePick().done(function(data){		
+		res.json({status: true, data: data});
+	},function(e){
+		res.json({status: false, error: e});
+	});		
+});
+
 module.exports = router;

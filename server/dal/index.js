@@ -715,6 +715,30 @@ module.exports = {
 				})
             });
 			
+        },
+		
+		getSchedulePick: function() {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `
+				SELECT to_char(last_modified_date, 'HH') as "hour", count(1) as "count"
+				FROM snailcare.queue
+				group by 1
+				order by 1
+				`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {								
+						client.release()
+						resolve(res.rows);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
         }
 		
     }
