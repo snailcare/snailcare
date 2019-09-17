@@ -278,6 +278,16 @@
 		  data: {				
 		  }
 		});
+	  },
+	  
+	  getOccupancyRatio: function () {
+		return $http({ // ajax http call
+		  method: 'POST',
+		  url: serverUrl + 'analytics/get_occupancy_ratio',
+		  cache: false,
+		  data: {				
+		  }
+		});
 	  }
 	  
     }

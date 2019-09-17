@@ -29,4 +29,13 @@ router.post('/get_schedule_pick', function(req, res){
 	});		
 });
 
+router.post('/get_occupancy_ratio', function(req, res){
+	logger.info('route: /get_occupancy_ratio');		
+	analytics.getOccupancyRatio().done(function(data){		
+		res.json({status: true, data: data});
+	},function(e){
+		res.json({status: false, error: e});
+	});		
+});
+
 module.exports = router;

@@ -28,6 +28,19 @@ module.exports = {
 			});
 		});
 		
+	},
+	
+	getOccupancyRatio: function() {	
+	
+		return new Promise(function(resolve, reject) {			
+			db.AnalyticsFunctions.getOccupancyRatio()
+				.done(function(data){
+					resolve(data);
+				},function(e){
+					reject(e);
+			});
+		});
+		
 	}
 	
 };

@@ -739,6 +739,35 @@ module.exports = {
 				})
             });
 			
+        },
+		
+		getOccupancyRatio: function() {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `
+				select b."name" || ' - ' || p."name" as "branch_profession", round(sum(case when q.id is not null then 1 else 0 end) / cast (sum(1) as float) * 100)
+				FROM snailcare.queue q
+					join snailcare.staff s on(q.staff_id = s.id)
+						join snailcare.branch b on (s.branch = b.code)
+							join snailcare.profession p on(p.code = s.profession)
+
+				where q."date" >= cast(to_char(current_date, 'YYYYMMDD') as int4) 
+				group by 1
+				order by 2 desc
+				limit 5`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {								
+						client.release()
+						resolve(res.rows);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
         }
 		
     }

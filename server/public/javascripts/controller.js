@@ -644,7 +644,6 @@
 			
 			Factory.getSchedulePick().success(function (data) {
 			  mCtrl.schedulePick = (data.status) ? data.data : [];	
-			console.log(mCtrl.schedulePick);
 				
 			  var metrics = Array.from(new Array(24), (x,i) => []);
 			  
@@ -918,18 +917,28 @@
 								}
 							});		
 							
-							 Factory.getPreviousAppointments().success(function (data) {
-								  mCtrl.prevAppointments = (data.status) ? data.data : [];
-								  
+							 Factory.getOccupancyRatio().success(function (data) {
+								  mCtrl.occupancyRatio = (data.status) ? data.data : [];
+								  console.log(mCtrl.occupancyRatio)
+								  var lables = [];
+								  var data = [];
+								  var backgrounds = [];
+								  var possibleBackgrounds = ["rgb(255, 99, 132)", "rgb(75, 192, 192)", "rgb(255, 205, 86)", 
+									"rgb(201, 203, 207)", "rgb(54, 162, 235)"];
+								  for (i = 0; i < mCtrl.occupancyRatio.length; i++) {
+									  lables[i] = mCtrl.occupancyRatio[i].branch_profession;
+									  data[i] = mCtrl.occupancyRatio[i].round;
+									  backgrounds[i] = possibleBackgrounds[i % 5];
+								  }	
 								  
 								  new Chart(document.getElementById("chartjs-5"), {
 									"type": "polarArea",
 									"data": {
-										"labels": ["Red", "Green", "Yellow", "Grey", "Blue"],
+										"labels": lables,
 										"datasets": [{
 												"label": "My First Dataset",
-												"data": [11, 16, 7, 3, 14],
-												"backgroundColor": ["rgb(255, 99, 132)", "rgb(75, 192, 192)", "rgb(255, 205, 86)", "rgb(201, 203, 207)", "rgb(54, 162, 235)"]
+												"data": data,
+												"backgroundColor": backgrounds
 											}
 										]
 									}
