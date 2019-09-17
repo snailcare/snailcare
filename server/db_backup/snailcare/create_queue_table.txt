@@ -18,6 +18,8 @@ CREATE TABLE snailcare.queue (
 
        id varchar NULL,
 
+       last_modified_date timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+
        CONSTRAINT queue_pkey PRIMARY KEY (staff_id, date, hour),
 
        CONSTRAINT queue_id_fkey FOREIGN KEY (id) REFERENCES snailcare.person(id),

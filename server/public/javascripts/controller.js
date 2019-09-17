@@ -606,6 +606,21 @@
         mCtrl.closeBlocker();
       };
 	  
+	  mCtrl.initAnalytics = function () {
+        $rootScope.layout.loading = true;
+		mCtrl.restEditMode();
+        try {
+          Factory.getUsersAnalytics().success(function (data) {
+			  mCtrl.usersAnalytics = (data.status) ? data.data : [];
+			  console.log(usersAnalytics);
+		  });
+        }
+        catch (e) {
+          console.log(e);
+        }
+        $rootScope.layout.loading = false;
+      };
+	  
 	  mCtrl.fillStaffUpdateFileds = function (index) {
         mCtrl.staffs[index].newFirstName =  mCtrl.staffs[index].firstName;
 		mCtrl.staffs[index].newLastName =  mCtrl.staffs[index].lastName;

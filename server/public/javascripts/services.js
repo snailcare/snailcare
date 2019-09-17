@@ -258,7 +258,17 @@
 			hour: data.hour
           }
         });
-      }
+      },
+	  
+	  getUsersAnalytics: function () {
+		return $http({ // ajax http call
+		  method: 'POST',
+		  url: serverUrl + 'analytics/get_users_analytics',
+		  cache: false,
+		  data: {				
+		  }
+		});
+	  },
 	  
     }
   }]);

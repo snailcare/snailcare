@@ -81,7 +81,7 @@ module.exports = {
            
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
-					query = `update snailcare.person set is_active = '0' where id = '${id}'`;
+					query = `update snailcare.person set is_active = '0', active_date = current_timestamp where id = '${id}'`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {								
 						client.release();
@@ -157,7 +157,7 @@ module.exports = {
            
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
-					query = `update snailcare.person set is_active = '1' where id = '${id}'`;
+					query = `update snailcare.person set is_active = '1', active_date = current_timestamp where id = '${id}'`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {								
 						client.release();
@@ -345,7 +345,7 @@ module.exports = {
            
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
-					query = `update snailcare.queue set id = '${clientId}' where staff_id = '${staffId}' and date = ${date} and hour = ${hour} and id is null`;
+					query = `update snailcare.queue set id = '${clientId}', last_modified_date = current_timestamp where staff_id = '${staffId}' and date = ${date} and hour = ${hour} and id is null`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
@@ -670,6 +670,39 @@ module.exports = {
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
 					query = `select * from snailcare.area`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {								
+						client.release()
+						resolve(res.rows);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        }
+		
+    },
+	
+	AnalyticsFunctions: {
+
+        getUsersAnalytics: function() {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `
+				select 
+					initcap(to_char(active_date, 'month')) as "month", 
+					to_char(active_date, 'MM') as month_order,
+					sum(case when is_active = '1' then 1 else 0 end) as "users_new",
+					sum(case when is_active = '0' then 1 else 0 end) as "users_left"
+				FROM snailcare.person 
+				where 
+					active_date >= CURRENT_DATE - INTERVAL '1 year'
+				group by 1, 2 
+				order by 2`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {								
 						client.release()

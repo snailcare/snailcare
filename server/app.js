@@ -11,6 +11,7 @@ var appointments = require('./routes/appointments');
 var branches = require('./routes/branches');
 var staffs = require('./routes/staffs');
 var area = require('./routes/area');
+var analytics = require('./routes/analytics');
 
 
 var app = express();
@@ -41,6 +42,7 @@ app.use('/appointments', appointments);
 app.use('/branches', branches);
 app.use('/staffs', staffs);
 app.use('/area', area);
+app.use('/analytics', analytics);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
