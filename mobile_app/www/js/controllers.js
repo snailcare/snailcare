@@ -164,11 +164,11 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
         div.setAttribute("id", "previousAppointmentPopUp");
         div.style.height = '100%';
 		
-		var fullDate = $rootScope.previousAppointments[index]['fullDate'];
-		var branch = $rootScope.previousAppointments[index]['branch'];
-		var status = $rootScope.previousAppointments[index]['status'];
-		var doctor = $rootScope.previousAppointments[index]['doctor'];
-		var profession = $rootScope.previousAppointments[index]['profession'];
+		var fullDate = $rootScope.nextAppointments[index]['fullDate'];
+		var branch = $rootScope.nextAppointments[index]['branch'];
+		var status = $rootScope.nextAppointments[index]['status'];
+		var doctor = $rootScope.nextAppointments[index]['doctor'];
+		var profession = $rootScope.nextAppointments[index]['profession'];
 		
 		div.innerText = `		
 		Date: ${fullDate}
