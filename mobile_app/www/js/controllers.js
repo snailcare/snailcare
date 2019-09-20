@@ -117,6 +117,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
                AppFactory.removeAppointment($rootScope.nextAppointments[index])
 				  .success(function (data) {
 					 $rootScope.nextAppointments.splice(index, 1);
+					 $scope.initScheduleAppointment();
 				  })
 				  .error(function (e) {
 					console.error(e);
@@ -302,6 +303,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 					$scope.formData = {};
 					$rootScope.alertPopup("Successfully Scheduled");
 					$scope.initScheduleAppointment();
+					$scope.initNextAppointments();
 				}
               }
               else {

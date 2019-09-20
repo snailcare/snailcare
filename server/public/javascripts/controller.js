@@ -129,11 +129,11 @@
 	  
 	  mCtrl.initScheduleAppointment = function () {
         $rootScope.layout.loading = true;
+		$rootScope.showSchedulePage = false;
 		mCtrl.restEditMode();
         try {
           Factory.getNextFreeAppointments().success(function (data) {
 			  mCtrl.appointments = (data.status) ? data.data : [];
-				console.log(mCtrl.appointments)
 			  Factory.getClients().success(function (data) {
 				  mCtrl.clients = (data.status) ? data.data : [];
 				  Factory.getBranches().success(function (data) {
@@ -142,9 +142,10 @@
 						  mCtrl.professions = (data.status) ? data.data : [];
 						  Factory.getStaffs().success(function (data) {
 							  mCtrl.staffs = (data.status) ? data.data : [];
-							  console.log(mCtrl.staffs)
 							  Factory.getAreas().success(function (data) {
 								  mCtrl.areas = (data.status) ? data.data : [];
+								  $rootScope.layout.loading = false;
+								  $rootScope.showSchedulePage = true;
 							  });
 						  });			  
 					  });
@@ -154,8 +155,9 @@
         }
         catch (e) {
           console.log(e);
-        }
-        $rootScope.layout.loading = false;
+		  $rootScope.showSchedulePage = true;
+		  $rootScope.layout.loading = false;
+        }        
       };
 	  
 	  mCtrl.scheduleAppointment = function () {
