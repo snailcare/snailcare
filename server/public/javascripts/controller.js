@@ -403,28 +403,30 @@
         if (formData && formData.id && formData.firstName && formData.lastName && formData.address &&
 				formData.phoneNumber && formData.email && formData.password && formData.personalInfo && 
 					formData.branch && formData.profession) {
-          Factory.addStaff(formData)
-            .success(function (data) {				
-              if (data.status) {
-				if (data.data && data.data.error && data.data.error === "already_exists") {
+	    if (mCtrl.clientValidation(formData.firstName, formData.lastName, formData.phoneNumber, formData.password)) {	
+			  Factory.addStaff(formData)
+				.success(function (data) {				
+				  if (data.status) {
+					if (data.data && data.data.error && data.data.error === "already_exists") {
+						$rootScope.formData.successMsg = null;
+						$rootScope.formData.errMsg = "Staff already exists";
+					} else {
+						$rootScope.formData.errMsg = null;
+						$rootScope.formData = {};
+						$rootScope.formData.successMsg = "Successfully Added";
+					}
+				  }
+				  else {
 					$rootScope.formData.successMsg = null;
-					$rootScope.formData.errMsg = "Staff already exists";
-				} else {
-					$rootScope.formData.errMsg = null;
-					$rootScope.formData = {};
-					$rootScope.formData.successMsg = "Successfully Added";
-				}
-              }
-              else {
-                $rootScope.formData.successMsg = null;
-                $rootScope.formData.errMsg = "Error adding new staff";
-              }
-            })
-            .error(function (e) {
-              $rootScope.formData.successMsg = null;
-              $rootScope.formData.errMsg = "Error adding new staff";
-              console.log(e);
-            })
+					$rootScope.formData.errMsg = "Error adding new staff";
+				  }
+				})
+				.error(function (e) {
+				  $rootScope.formData.successMsg = null;
+				  $rootScope.formData.errMsg = "Error adding new staff";
+				  console.log(e);
+				})
+    	   }	
         }
         else {
           $rootScope.formData.successMsg = null;
