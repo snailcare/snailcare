@@ -325,32 +325,72 @@
         mCtrl.closeBlocker();
       };
 	  
+	  
+	  mCtrl.clientValidation = function (firstName, lastName, phoneNumber, password) {
+		
+			  
+			var letters = /^[A-Za-z]+$/;
+			if (!letters.test(firstName)) {
+				$rootScope.formData.successMsg = null;
+				$rootScope.formData.errMsg = "First name is not valid";
+				return false;
+			}
+
+			if (!letters.test(lastName)) {
+				$rootScope.formData.successMsg = null;
+				$rootScope.formData.errMsg = "Last name is not valid";
+				return false;
+			}
+			
+		  
+		  if (isNaN(phoneNumber.replace(/-/g, ''))) {
+		    $rootScope.formData.successMsg = null;
+			$rootScope.formData.errMsg = "Phone number is not valid";
+			return false;
+		  }
+		  
+		  
+		  if (password) {
+		   if(password.length < 8) {
+			$rootScope.formData.successMsg = null;
+			$rootScope.formData.errMsg = "Password must has at least 8 characters";
+			return false;   
+		   }
+			  
+		  }
+			   
+		  return true;
+	  };
+	  
+	  
 	  mCtrl.addClient = function () {
         var formData = $rootScope.formData;
         if (formData && formData.id && formData.firstName && formData.lastName && formData.address &&
 				formData.phoneNumber && formData.email && formData.password) {
-          Factory.addClient(formData)
-            .success(function (data) {				
-              if (data.status) {
-				if (data.data && data.data.error && data.data.error === "already_exists") {
+		  if (mCtrl.clientValidation(formData.firstName, formData.lastName, formData.phoneNumber, formData.password)) {
+			 Factory.addClient(formData)
+				.success(function (data) {				
+				  if (data.status) {
+					if (data.data && data.data.error && data.data.error === "already_exists") {
+						$rootScope.formData.successMsg = null;
+						$rootScope.formData.errMsg = "Client already exists";
+					} else {
+						$rootScope.formData.errMsg = null;
+						$rootScope.formData = {};
+						$rootScope.formData.successMsg = "Successfully Added";
+					}
+				  }
+				  else {
 					$rootScope.formData.successMsg = null;
-					$rootScope.formData.errMsg = "Client already exists";
-				} else {
-					$rootScope.formData.errMsg = null;
-					$rootScope.formData = {};
-					$rootScope.formData.successMsg = "Successfully Added";
-				}
-              }
-              else {
-                $rootScope.formData.successMsg = null;
-                $rootScope.formData.errMsg = "Error adding new client";
-              }
-            })
-            .error(function (e) {
-              $rootScope.formData.successMsg = null;
-              $rootScope.formData.errMsg = "Error adding new client";
-              console.log(e);
-            })
+					$rootScope.formData.errMsg = "Error adding new client";
+				  }
+				})
+				.error(function (e) {
+				  $rootScope.formData.successMsg = null;
+				  $rootScope.formData.errMsg = "Error adding new client";
+				  console.log(e);
+				})
+		  }
         }
         else {
           $rootScope.formData.successMsg = null;
@@ -475,38 +515,40 @@
         var client = mCtrl.clients[mCtrl.currentUserIndex];
         if (client && client.newFirstName && client.newLastName && client.newPhoneNumber
 				&& client.newAddress && client.newEmail) {
-          Factory.updateClient(client)
-            .success(function (data) {
-              if (data.status) {				  
-				$rootScope.formData.errMsg = null;
-					$rootScope.formData = {};
-					$rootScope.formData.successMsg = "Changed Successfully";
-					try {
-					client.first_name = client.newFirstName;
-					client.last_name = client.newLastName;
-					client.phone_number = client.newPhoneNumber;		
-					client.address = client.newAddress;
-					client.email = client.newEmail;
-									
-					client.newFirstName = '';	
-					client.newLastName = '';	
-					client.newPhoneNumber = '';		
-					client.newAddress = '';	
-					client.newEmail = '';				
-					}
-					catch (e) {
-					}                
-              }
-              else {
-                $rootScope.formData.successMsg = null;
-                $rootScope.formData.errMsg = "Error editing client";
-              }
-            })
-            .error(function (e) {
-              $rootScope.formData.successMsg = null;
-              $rootScope.formData.errMsg = "Error editing client";
-              console.log(e);
-            });
+		  if (mCtrl.clientValidation(client.newFirstName, client.newLastName, client.newPhoneNumber, '')) {		
+			  Factory.updateClient(client)
+				.success(function (data) {
+				  if (data.status) {				  
+					$rootScope.formData.errMsg = null;
+						$rootScope.formData = {};
+						$rootScope.formData.successMsg = "Changed Successfully";
+						try {
+						client.first_name = client.newFirstName;
+						client.last_name = client.newLastName;
+						client.phone_number = client.newPhoneNumber;		
+						client.address = client.newAddress;
+						client.email = client.newEmail;
+										
+						client.newFirstName = '';	
+						client.newLastName = '';	
+						client.newPhoneNumber = '';		
+						client.newAddress = '';	
+						client.newEmail = '';				
+						}
+						catch (e) {
+						}                
+				  }
+				  else {
+					$rootScope.formData.successMsg = null;
+					$rootScope.formData.errMsg = "Error editing client";
+				  }
+				})
+				.error(function (e) {
+				  $rootScope.formData.successMsg = null;
+				  $rootScope.formData.errMsg = "Error editing client";
+				  console.log(e);
+				});
+		  }
         }
         else {
           $rootScope.formData.successMsg = null;
