@@ -9,7 +9,7 @@ var pool = new Pool({
 	password: 'H6x2eyjtYTbgMOLSpK405aBVy07lO1B1',
 	port: 5432,
 	ssl: true,
-	max: 150,
+	max: 70,
 	idleTimeoutMillis: 999999,
 	connectionTimeoutMillis: 999999
 });
