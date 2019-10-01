@@ -60,6 +60,15 @@ angular.module('snailcareapp', ['ionic', 'snailcareapp.controllers', 'snailcarea
           }
         },
         controller: 'AppCtrl'
+      })
+	  .state('app.messagesArea', {
+        url: '/messagesArea',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/messagesArea.html'
+          }
+        },
+        controller: 'AppCtrl'
       })     
       .state('app.about', {
         url: '/about',

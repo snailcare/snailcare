@@ -1,0 +1,17 @@
+<ion-view view-title="Next Appointments">
+  <ion-content>
+    <div class="container">
+	  <div ng-show="loading" class="loading-animation"><ion-spinner></ion-spinner></div>
+         <div ng-show="nextAppointments.length > 0" ng-hide="loading">
+            <b>Messages:</b><br/><br/>
+            <div ng-click="moreInfoNextAppointment($index)" class="row item" ng-repeat="nextAppointment in nextAppointments  | filter:search_query">
+               <div class="col">{{nextAppointment.fullDate}}</div>
+			   <div class="col">{{nextAppointment.profession}}</div>
+			</div>
+         </div>
+         <div ng-show="nextAppointments.length == 0 && !loading">
+            <b>There are no messages.</b>
+         </div>
+    </div>
+  </ion-content>
+</ion-view>
