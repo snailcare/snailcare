@@ -51,13 +51,13 @@ module.exports = {
 				db.AppointmentsFunctions.removeAppointment(staffId, date, hour, id)
 					.done(function(data){
 						if (hour <= 23) {
-							var removeAppointmentData = data;
+							let removeAppointmentData = data;
 							db.AppointmentsFunctions.getStandByAppointments(staffId, date, hour)
 								.done(function(appointments){
 									logger.info(JSON.stringify(appointments));
 																
 									try {
-										 for (var i = 0; i < appointments.length; i++) {								 
+										 for (let i = 0; i < appointments.length; i++) {								 
 											 var phoneNunmber = appointments[i].phone_number;
 											 var first_name = appointments[i].first_name;								
 											 var message = `Hello ${first_name}, Appointment is now avalibale for you at snailcare app. Enjoy!`;	
@@ -73,17 +73,16 @@ module.exports = {
 											  } else {
 												  logger.info(JSON.parse(body));
 											  }
+											  logger.info('send messages: i = ${i}')
 											  if (i == appointments.length -1) {
-												  logger.info('finish send messages');
-												  resolve(removeAppointmentData);
-											  }									  
+												  logger.info('finish send messages');												  
+											  }					  
 											});
 										}
 									}
 									catch(error) {
 									  logger.error(error);
 									  logger.info('not finish send messages - Exception');
-									  resolve(removeAppointmentData);
 									}
 									logger.info('not finish send messages');
 									resolve(removeAppointmentData);
