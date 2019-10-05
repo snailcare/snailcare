@@ -50,46 +50,48 @@ module.exports = {
 				
 				db.AppointmentsFunctions.removeAppointment(staffId, date, hour, id)
 					.done(function(data){
-						var removeAppointmentData = data;
-						db.AppointmentsFunctions.getStandByAppointments(staffId, date, hour)
-							.done(function(appointments){
-								logger.info(JSON.stringify(appointments));
-															
-								try {
-									 for (var i = 0; i < appointments.length; i++) {								 
-										 var phoneNunmber = appointments[i].phone_number;
-										 var first_name = appointments[i].first_name;								
-										 var message = `Hello ${first_name}, Appointment is now avalibale for you at snailcare app. Enjoy!`;	
-										 request.post('https://textbelt.com/text', {
-										  form: {
-											phone: phoneNunmber,
-											message: message,
-											key: 'textbelt',
-										  },
-										}, function(err, httpResponse, body) {
-										  if (err) {
-											logger.error('Error:', err);
-										  } else {
-											  logger.info(JSON.parse(body));
-										  }
-										  if (i == appointments.length -1) {
-											  logger.info('finish send messages');
-											  resolve(removeAppointmentData);
-										  }									  
-										});
+						if (hour <= 23) {
+							var removeAppointmentData = data;
+							db.AppointmentsFunctions.getStandByAppointments(staffId, date, hour)
+								.done(function(appointments){
+									logger.info(JSON.stringify(appointments));
+																
+									try {
+										 for (var i = 0; i < appointments.length; i++) {								 
+											 var phoneNunmber = appointments[i].phone_number;
+											 var first_name = appointments[i].first_name;								
+											 var message = `Hello ${first_name}, Appointment is now avalibale for you at snailcare app. Enjoy!`;	
+											 request.post('https://textbelt.com/text', {
+											  form: {
+												phone: phoneNunmber,
+												message: message,
+												key: 'textbelt',
+											  },
+											}, function(err, httpResponse, body) {
+											  if (err) {
+												logger.error('Error:', err);
+											  } else {
+												  logger.info(JSON.parse(body));
+											  }
+											  if (i == appointments.length -1) {
+												  logger.info('finish send messages');
+												  resolve(removeAppointmentData);
+											  }									  
+											});
+										}
 									}
-								}
-								catch(error) {
-								  logger.error(error);
-								  logger.info('not finish send messages - Exception');
-								  resolve(removeAppointmentData);
-							    }
-								logger.info('not finish send messages');
-								resolve(removeAppointmentData);
-							},function(e){
-								logger.error(e);
-								resolve(removeAppointmentData);
-							});		
+									catch(error) {
+									  logger.error(error);
+									  logger.info('not finish send messages - Exception');
+									  resolve(removeAppointmentData);
+									}
+									logger.info('not finish send messages');
+									resolve(removeAppointmentData);
+								},function(e){
+									logger.error(e);
+									resolve(removeAppointmentData);
+								});						
+						}
 						resolve(data);
 					},function(e){
 						reject(e);
