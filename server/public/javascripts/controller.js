@@ -343,7 +343,7 @@
 			}
 			
 		  
-		  if (isNaN(phoneNumber.replace(/-/g, ''))) {
+		  if (isNaN(phoneNumber.replace(/-/g, '').replace(/\+/g, ''))) {
 		    $rootScope.formData.successMsg = null;
 			$rootScope.formData.errMsg = "Phone number is not valid";
 			return false;
