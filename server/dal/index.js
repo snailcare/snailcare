@@ -286,7 +286,7 @@ module.exports = {
            
             return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
 				pool.connect().then(client => {	
-					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staffId = '${staffId}') and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
+					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staff_id = '${staffId}') and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
@@ -306,7 +306,7 @@ module.exports = {
            
             return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
 				pool.connect().then(client => {	
-					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staffId = '${staffId}' and hour <= 23) and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
+					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staff_id = '${staffId}' and hour <= 23) and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();

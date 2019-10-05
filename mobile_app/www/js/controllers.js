@@ -121,7 +121,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
     $scope.removeAppointment = function (index) {
 	  
 	  var myPopup = $ionicPopup.show({
-        template: 'Are You sure?',
+        template: 'Are You Sure?',
         title: 'About To Remove',
         scope: $scope,
         buttons: [
@@ -395,8 +395,8 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
     $scope.rescheduleAppointment = function (index) {
 	  
 	  var myPopup = $ionicPopup.show({
-        template: 'Are You sure?',
-        title: 'About To reschedule',
+        template: 'Are You Sure?',
+        title: 'About To Reschedule',
         scope: $scope,
         buttons: [
           {text: 'Cancel'},
@@ -407,10 +407,6 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 			   $rootScope.messages[index].client = $rootScope.userId;
                AppFactory.rescheduleAppointment($rootScope.messages[index])
 				  .success(function (data) {
-					$rootScope.alertPopup("Successfully Scheduled");
-					$scope.initScheduleAppointment();
-					$scope.initNextAppointments();
-					$scope.initMessages();
 					if (data.status) {						
 						if (data.data && data.data.error && data.data.error === "already_exists") {
 							$rootScope.alertPopup("appointment already had been scheduled");
