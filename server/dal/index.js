@@ -494,7 +494,7 @@ module.exports = {
 			to_char(to_timestamp(queue.date || '_' || 1, 'YYYYMMDD_HH24'), 'YYYY-MM-DD') as "date_formatted",
 			min(to_char(to_timestamp(queue.date || '_' || least(case when queue.id is null then queue.hour else 100 end, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')) as "fullDate",
 			min(case when queue.id is null then queue.hour else 100 end) as hour,
-			max(case when queue.id = '${id}' then 1 else 0 end) as is_available,
+			max(case when queue.id = '${id}' and queue.hour > 23 then 1 else 0 end) as is_available,
 			max(case when queue.id = '${id}' then queue.hour else -1 end) as original_hour
 		from snailcare.queue queue 		 
 					join snailcare.staff staff on queue.staff_id = staff.id
@@ -505,7 +505,7 @@ module.exports = {
 		group by
 			1,2,3,4,5,6
 		having 
-			max(case when queue.id = '${id}' then 1 else 0 end) = 1 and
+			max(case when queue.id = '${id}' and queue.hour > 23 then 1 else 0 end) = 1 and
 			min(case when queue.id is null then queue.hour else 100 end) < 24
 		order by
 			2,5 desc`;
