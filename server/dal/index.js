@@ -368,7 +368,7 @@ module.exports = {
 				pool.connect().then(client => {						
 					query = `
 		select 
-			queue.staff_id, queue.date, queue.id,  person.phone_number, person.first_name, person.last_name,
+			queue.staff_id, queue.date, queue.id,  person.phone_number, initcap(person.first_name) as first_name, initcap(person.last_name) as last_name,
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
 			to_char(to_timestamp(queue.date || '_' || '${hour}', 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00') as "fullDate"
 		from snailcare.queue queue 		 
