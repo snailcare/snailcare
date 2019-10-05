@@ -85,4 +85,14 @@ router.post('/get_next_appointments_by_id', function(req, res){
 	});	
 });
 
+router.post('/get_messages_by_id', function(req, res){
+	logger.info('route: /get_messages_by_id');	
+	var id = req.body.id;
+	appointments.getMessagesById(id).done(function(data){		
+		res.json({status: true, data: data});
+	},function(e){
+		res.json({status: false, error: e});
+	});	
+});
+
 module.exports = router;

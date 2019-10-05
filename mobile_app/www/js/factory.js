@@ -126,6 +126,17 @@ angular.module('snailcareapp.factory', []).factory('AppFactory', function($http)
 				hour: data.hour
 			  }
 			});
+		},
+		
+		getMessagesById: function(id) {
+			return $http({
+				method: 'POST',
+				url: 'https://snailcare.herokuapp.com/appointments/get_messages_by_id',
+				cache: false,
+				data: {
+					id: id
+				}
+			});
 		}
 	  
 	}

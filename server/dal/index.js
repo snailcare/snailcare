@@ -282,11 +282,11 @@ module.exports = {
 			
         },
 		
-		isClientAlreadyScheduledAppointment: function(date, clientId) {
+		isClientAlreadyScheduledAppointment: function(date, clientId, hour, staffId) {
            
             return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
 				pool.connect().then(client => {	
-					query = `select count(1) as result from snailcare.queue where date = ${date} and id = '${clientId}'`;
+					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staffId = '${staffId}')`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
@@ -453,6 +453,46 @@ module.exports = {
 					client.query(query).then(res => {								
 						client.release()
 						resolve(res.rows);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
+		
+		getMessagesById: function(id) {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `
+		select 
+			queue.staff_id, queue.date,
+			staff.personal_information as doctor, branch.name as branch, profession.name as profession,			
+			to_char(to_timestamp(queue.date || '_' || 1, 'YYYYMMDD_HH24'), 'YYYY-MM-DD') as "date_formatted",
+			min(to_char(to_timestamp(queue.date || '_' || least(case when queue.id is null then queue.hour else 100 end, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')) as "fullDate",
+			min(case when queue.id is null then queue.hour else 100 end) as hour,
+			max(case when queue.id = '${id}' then 1 else 0 end) as is_available
+		from snailcare.queue queue 		 
+					join snailcare.staff staff on queue.staff_id = staff.id
+						join snailcare.branch branch on staff.branch = branch.code
+							join snailcare.profession profession on staff.profession = profession.code
+		where 
+			queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)
+		group by
+			1,2,3,4,5,6
+		having 
+			max(case when queue.id = '${id}' then 1 else 0 end) = 1 and
+			min(case when queue.id is null then queue.hour else 100 end) < 24
+		order by
+			2,5 desc`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {	
+						client.release();
+						logger.info(res.rows[0])
+						resolve(res.rows[0]);
 					})
 					.catch(e => {						
 						client.release();						

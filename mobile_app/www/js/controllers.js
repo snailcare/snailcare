@@ -32,6 +32,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 			  $scope.initPreviousAppointments();
 			  $scope.initNextAppointments();
 			  $scope.initScheduleAppointment();
+			  $scope.initMessages();
               $state.go('app.login');              
             }
             else {
@@ -99,6 +100,21 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
     };
 	
 	/**
+     * initMessages :: function
+     * description: load messages
+     */
+    $scope.initMessages = function () {
+	  AppFactory.getMessagesById($rootScope.userId)
+          .success(function (data) {
+			$rootScope.messages = data.data;
+			console.log(data.data) // removeit
+          })
+          .error(function (e) {
+            console.error(e);
+          });      
+    };
+	
+	/**
      * removeAppointment :: function
      * description: remove an appointment
      */
@@ -119,6 +135,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 					 $rootScope.nextAppointments.splice(index, 1);
 					 $scope.formData = {};
 					 $scope.initScheduleAppointment();
+					 $scope.initMessages();
 				  })
 				  .error(function (e) {
 					console.error(e);
@@ -305,6 +322,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 					$rootScope.alertPopup("Successfully Scheduled");
 					$scope.initScheduleAppointment();
 					$scope.initNextAppointments();
+					$scope.initMessages();
 				}
               }
               else {

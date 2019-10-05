@@ -109,7 +109,7 @@ module.exports = {
 				return;
 			}
 
-			db.AppointmentsFunctions.isClientAlreadyScheduledAppointment(date, clientId).done(function(data){		
+			db.AppointmentsFunctions.isClientAlreadyScheduledAppointment(date, clientId, hour, staffId).done(function(data){		
 		
 				if (data.result && parseInt(data.result)) {
 					logger.info('scheduleAppointment - already_exists')
@@ -140,6 +140,19 @@ module.exports = {
 			});		
 			
 		});			
+	},
+	
+	getMessagesById: function(id) {	
+	
+		return new Promise(function(resolve, reject) {			
+			db.AppointmentsFunctions.getMessagesById(id)
+				.done(function(data){
+					resolve(data);
+				},function(e){
+					reject(e);
+			});
+		});
+		
 	}
 	
 };
