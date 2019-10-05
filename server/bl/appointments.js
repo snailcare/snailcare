@@ -73,7 +73,6 @@ module.exports = {
 											  } else {
 												  logger.info(JSON.parse(body));
 											  }
-											  logger.info('send messages: i = ${i}')
 											  if (i == appointments.length -1) {
 												  logger.info('finish send messages');												  
 											  }					  
@@ -84,7 +83,6 @@ module.exports = {
 									  logger.error(error);
 									  logger.info('not finish send messages - Exception');
 									}
-									logger.info('not finish send messages');
 									resolve(removeAppointmentData);
 								},function(e){
 									logger.error(e);
