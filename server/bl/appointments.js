@@ -183,14 +183,14 @@ module.exports = {
 				
 					db.AppointmentsFunctions.scheduleAppointment(staffId, date, hour, clientId)
 						.done(function(data){
-							db.AppointmentsFunctions.isExists(staffId, date, originalHour, id).done(function(data){								
+							db.AppointmentsFunctions.isExists(staffId, date, originalHour, clientId).done(function(data){								
 								if (!(data.result) || !(parseInt(data.result))) {
 									logger.info('Something went wrong');
 									resolve({'error': 'not_exists'});
 									return;
 								}
 								
-								db.AppointmentsFunctions.removeAppointment(staffId, date, originalHour, id)
+								db.AppointmentsFunctions.removeAppointment(staffId, date, originalHour, clientId)
 									.done(function(data){
 										resolve(data);
 									},function(e){
