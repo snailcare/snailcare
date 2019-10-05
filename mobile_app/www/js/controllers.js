@@ -107,7 +107,6 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 	  AppFactory.getMessagesById($rootScope.userId)
           .success(function (data) {
 			$rootScope.messages = data.data;
-			console.log(data.data) // removeit
           })
           .error(function (e) {
             console.error(e);

@@ -50,7 +50,7 @@ module.exports = {
 				db.AppointmentsFunctions.removeAppointment(staffId, date, hour, id)
 					.done(function(data){
 						var removeAppointmentData = data;
-						db.AppointmentsFunctions.getStandByAppointments(staffId, date)
+						db.AppointmentsFunctions.getStandByAppointments(staffId, date, hour)
 							.done(function(appointments){
 								logger.info(JSON.stringify(appointments));
 								
