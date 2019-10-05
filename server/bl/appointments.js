@@ -56,29 +56,36 @@ module.exports = {
 								logger.info(JSON.stringify(appointments));
 															
 								try {
-									 var i = 0;
-									 var phoneNunmber = appointments[i].phone_number;
-									 var first_name = appointments[i].first_name;								
-									 var message = `Hello ${first_name}, Appointment is now avalibale for you at snailcare app. Enjoy!`;	
-									 request.post('https://textbelt.com/text', {
-									  form: {
-										phone: phoneNunmber,
-										message: message,
-										key: 'textbelt',
-									  },
-									}, function(err, httpResponse, body) {
-									  if (err) {
-										logger.error('Error:', err);
-										resolve(removeAppointmentData);
-										return;
-									  }
-									  logger.info(JSON.parse(body));
-									  resolve(removeAppointmentData);
-									});
+									 for (var i = 0; i < appointments.length; i++) {								 
+										 var phoneNunmber = appointments[i].phone_number;
+										 var first_name = appointments[i].first_name;								
+										 var message = `Hello ${first_name}, Appointment is now avalibale for you at snailcare app. Enjoy!`;	
+										 request.post('https://textbelt.com/text', {
+										  form: {
+											phone: phoneNunmber,
+											message: message,
+											key: 'textbelt',
+										  },
+										}, function(err, httpResponse, body) {
+										  if (err) {
+											logger.error('Error:', err);
+										  } else {
+											  logger.info(JSON.parse(body));
+										  }
+										  if (i == appointments.length -1) {
+											  logger.info('finish send messages');
+											  resolve(removeAppointmentData);
+										  }									  
+										});
+									}
 								}
 								catch(error) {
 								  logger.error(error);
+								  logger.info('not finish send messages - Exception');
+								  resolve(removeAppointmentData);
 							    }
+								logger.info('not finish send messages');
+								resolve(removeAppointmentData);
 							},function(e){
 								logger.error(e);
 								resolve(removeAppointmentData);
