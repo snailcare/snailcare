@@ -1,5 +1,6 @@
 var db = require('../dal');
 var Promise = require('promise');
+var request = require('request');
 var logger = require('../logger');
 
 module.exports = {
@@ -53,9 +54,31 @@ module.exports = {
 						db.AppointmentsFunctions.getStandByAppointments(staffId, date, hour)
 							.done(function(appointments){
 								logger.info(JSON.stringify(appointments));
-								
-								
-								resolve(removeAppointmentData);
+															
+								try {
+									 var i = 0;
+									 var phoneNunmber = appointments[i].phone_number;
+									 var first_name = appointments[i].first_name;								
+									 var message = `Hello ${first_name}, Appointment is now avalibale for you at snailcare app. Enjoy!`;	
+									 request.post('https://textbelt.com/text', {
+									  form: {
+										phone: phoneNunmber,
+										message: message,
+										key: 'textbelt',
+									  },
+									}, function(err, httpResponse, body) {
+									  if (err) {
+										logger.error('Error:', err);
+										resolve(removeAppointmentData);
+										return;
+									  }
+									  logger.info(JSON.parse(body));
+									  resolve(removeAppointmentData);
+									});
+								}
+								catch(error) {
+								  logger.error(error);
+							    }
 							},function(e){
 								logger.error(e);
 								resolve(removeAppointmentData);
