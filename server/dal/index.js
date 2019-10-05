@@ -491,8 +491,8 @@ module.exports = {
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
-						logger.info(res.rows[0])
-						resolve(res.rows[0]);
+						logger.info(res.rows)
+						resolve(res.rows);
 					})
 					.catch(e => {						
 						client.release();						
