@@ -49,6 +49,17 @@ module.exports = {
 				
 				db.AppointmentsFunctions.removeAppointment(staffId, date, hour, id)
 					.done(function(data){
+						var removeAppointmentData = data;
+						db.AppointmentsFunctions.getStandByAppointments(staffId, date)
+							.done(function(appointments){
+								logger.info(JSON.stringify(appointments));
+								
+								
+								resolve(removeAppointmentData);
+							},function(e){
+								logger.error(e);
+								resolve(removeAppointmentData);
+							});		
 						resolve(data);
 					},function(e){
 						reject(e);

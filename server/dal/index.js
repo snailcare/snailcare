@@ -362,6 +362,41 @@ module.exports = {
 			
         },
 		
+		getStandByAppointments: function(staffId, date, hour) {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {						
+					query = `
+		select 
+			queue.staff_id, queue.date, queue.id,  person.phone_number,
+			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
+			to_char(to_timestamp(queue.date || '_' || '${hour}', 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00') as "fullDate"
+		from snailcare.queue queue 		 
+				join snailcare.staff staff on queue.staff_id = staff.id
+					join snailcare.branch branch on staff.branch = branch.code
+						join snailcare.profession profession on staff.profession = profession.code
+							join snailcare.person person on queue.id = person.id
+		where 
+			queue.id is not null and
+			staff_id = '${staffId}' and 
+			date = ${date} and
+			hour > 23`;			
+			
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {	
+						client.release();
+						logger.info(res.rows)
+						resolve(res.rows);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
+		
 		scheduleAppointment: function(staffId, date, hour, clientId) {
            
             return new Promise(function(resolve, reject) {				
