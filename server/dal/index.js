@@ -286,7 +286,27 @@ module.exports = {
            
             return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
 				pool.connect().then(client => {	
-					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staffId = '${staffId}')`;
+					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staffId = '${staffId}') and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {	
+						client.release();
+						logger.info(res.rows[0])
+						resolve(res.rows[0]);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
+		
+		isClientAlreadyRecheduledAppointment: function(date, clientId, hour, staffId) {
+           
+            return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
+				pool.connect().then(client => {	
+					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staffId = '${staffId}' and hour <= 23) and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
@@ -474,7 +494,8 @@ module.exports = {
 			to_char(to_timestamp(queue.date || '_' || 1, 'YYYYMMDD_HH24'), 'YYYY-MM-DD') as "date_formatted",
 			min(to_char(to_timestamp(queue.date || '_' || least(case when queue.id is null then queue.hour else 100 end, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')) as "fullDate",
 			min(case when queue.id is null then queue.hour else 100 end) as hour,
-			max(case when queue.id = '${id}' then 1 else 0 end) as is_available
+			max(case when queue.id = '${id}' then 1 else 0 end) as is_available,
+			max(case when queue.id = '${id}' then queue.hour else -1 end) as original_hour
 		from snailcare.queue queue 		 
 					join snailcare.staff staff on queue.staff_id = staff.id
 						join snailcare.branch branch on staff.branch = branch.code

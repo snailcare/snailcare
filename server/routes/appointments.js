@@ -95,4 +95,18 @@ router.post('/get_messages_by_id', function(req, res){
 	});	
 });
 
+router.post('/reschedule_appointment', function(req, res){
+	logger.info('route: /reschedule_appointment');
+	var staffId = req.body.staffId;
+	var date = req.body.date;
+	var hour = req.body.hour;
+	var clientId = req.body.clientId;
+	var originalHour = req.body.originalHour;
+	appointments.rescheduleAppointment(staffId, date, hour, clientId, originalHour).done(function(data){		
+		res.json({status: true, data: data});
+	},function(e){
+		res.json({status: false, error: e});
+	});			
+});
+
 module.exports = router;

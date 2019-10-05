@@ -283,7 +283,7 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
 		
 		var fullDate = $rootScope.messages[index]['fullDate'];
 		var branch = $rootScope.messages[index]['branch'];
-		var status = 'On time'
+		var status = 'on time'
 		var doctor = $rootScope.messages[index]['doctor'];
 		var profession = $rootScope.messages[index]['profession'];
 		
@@ -386,6 +386,77 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
         else {
 		  $rootScope.alertPopup("Please fill all necessary fields");
         }
+    };
+	
+	/**
+     * rescheduleAppointment :: function
+     * description: reschedule an appointment
+     */
+    $scope.rescheduleAppointment = function (index) {
+	  
+	  var myPopup = $ionicPopup.show({
+        template: 'Are You sure?',
+        title: 'About To reschedule',
+        scope: $scope,
+        buttons: [
+          {text: 'Cancel'},
+          {
+            text: '<b>Schedule</b>',
+            type: 'button-assertive',
+            onTap: function (e) {
+			   $rootScope.messages[index].client = $rootScope.userId;
+               AppFactory.rescheduleAppointment($rootScope.messages[index])
+				  .success(function (data) {
+					$rootScope.alertPopup("Successfully Scheduled");
+					$scope.initScheduleAppointment();
+					$scope.initNextAppointments();
+					$scope.initMessages();
+					if (data.status) {						
+						if (data.data && data.data.error && data.data.error === "already_exists") {
+							$rootScope.alertPopup("appointment already had been scheduled");
+							$scope.initScheduleAppointment();
+							$scope.initNextAppointments();
+							$scope.initMessages();
+						} else if (data.data && data.data.error && data.data.error === "something_went_wrong") {
+							$rootScope.alertPopup("something went wrong");
+							$scope.initScheduleAppointment();
+							$scope.initNextAppointments();
+							$scope.initMessages();
+						} else {
+							$scope.formData = {};
+							$rootScope.alertPopup("Successfully Scheduled");
+							$scope.initScheduleAppointment();
+							$scope.initNextAppointments();
+							$scope.initMessages();
+						}	
+					} else {
+						$rootScope.alertPopup("something went wrong");
+						$scope.initScheduleAppointment();
+						$scope.initNextAppointments();
+						$scope.initMessages();
+					}
+					
+				  })
+				  .error(function (e) {
+					console.error(e);
+					$rootScope.alertPopup("something went wrong");
+					$scope.initScheduleAppointment();
+					$scope.initNextAppointments();
+					$scope.initMessages();
+				  }); 
+            }
+          }
+        ]
+      });
+	  
+	   myPopup.then(function (res) {
+	  
+	  });
+
+      $timeout(function () {
+        myPopup.close(); //close the popup after 10 seconds for some reason
+      }, 10000);	 
+	
     };
 	
 	/**
