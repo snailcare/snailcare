@@ -381,7 +381,7 @@ module.exports = {
 			
         },
 		
-		removeAppointmentAfterReschedule: function(staffId, date, clientId, hour)) {
+		removeAppointmentAfterReschedule: function(staffId, date, clientId, hour) {
            
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
