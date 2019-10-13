@@ -231,12 +231,9 @@ module.exports = {
 								},function(e){
 									reject(e);
 								});	
-						},function(e){
-							reject(e);
-						});
-					},function(e){
-						reject(e);
-					});	
+				},function(e){
+					reject(e);
+				});
 			},function(e){
 				reject(e);
 			});	
