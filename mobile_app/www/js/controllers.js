@@ -363,9 +363,11 @@ angular.module('snailcareapp.controllers', ['snailcareapp.factory'])
               if (data.status) {
 				if (data.data && data.data.error && data.data.error === "already_exists") {
 					$rootScope.alertPopup("appointment already had been scheduled");
-				} else if (data.data && data.data.error && data.data.error === "something_went_wrong") {
+				} else if (data.data && data.data.error && data.data.error === "stand_by_exceeded") {
+					$rootScope.alertPopup("only 5 stand by appointments is possible");
+				}  else if (data.data && data.data.error && data.data.error === "something_went_wrong") {
 					$rootScope.alertPopup("something went wrong");
-				} else {
+				}else {
 					$scope.formData = {};
 					$rootScope.alertPopup("Successfully Scheduled");
 					$scope.initScheduleAppointment();

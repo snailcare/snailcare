@@ -282,11 +282,42 @@ module.exports = {
 			
         },
 		
+		isStandByexceeded: function(clientId, hour) {
+           
+            return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
+				pool.connect().then(client => {	
+					query = `
+		select count(1) as result where 5 <= (
+			select 
+				count(1) 
+			from 
+				snailcare.queue
+			where 
+				queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int) and 
+				queue.hour > 23 and 
+				${hour} > 23
+				and id = '${clientId}'
+		)`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {	
+						client.release();
+						logger.info(res.rows[0])
+						resolve(res.rows[0]);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
+		
 		isClientAlreadyScheduledAppointment: function(date, clientId, hour, staffId) {
            
             return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
 				pool.connect().then(client => {	
-					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staff_id = '${staffId}') and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
+					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staff_id = '${staffId}' and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int) and queue.hour <= 23)`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
@@ -368,18 +399,16 @@ module.exports = {
 				pool.connect().then(client => {						
 					query = `
 		select 
-			queue.staff_id, queue.date, queue.id,  person.phone_number, initcap(person.first_name) as first_name, initcap(person.last_name) as last_name,
-			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
-			to_char(to_timestamp(queue.date || '_' || '${hour}', 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00') as "fullDate"
-		from snailcare.queue queue 		 
-				join snailcare.staff staff on queue.staff_id = staff.id
-					join snailcare.branch branch on staff.branch = branch.code
-						join snailcare.profession profession on staff.profession = profession.code
-							join snailcare.person person on queue.id = person.id
+			distinct person.phone_number, 
+			initcap(person.first_name) as first_name
+		from 
+			snailcare.queue queue
+				join snailcare.person person on queue.id = person.id
 		where 
 			queue.id is not null and
 			staff_id = '${staffId}' and 
-			date = ${date} and
+			queue.date < ${date} and
+			queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int) and
 			hour > 23`;			
 			
 					logger.info(`running: ${query}`);

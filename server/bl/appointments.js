@@ -52,7 +52,7 @@ module.exports = {
 					.done(function(data){
 						if (hour <= 23) {
 							let removeAppointmentData = data;
-							db.AppointmentsFunctions.getStandByAppointments(staffId, date, hour)
+							db.AppointmentsFunctions.getStandByAppointments(staffId, date)
 								.done(function(appointments){
 									logger.info(JSON.stringify(appointments));
 																
@@ -157,20 +157,30 @@ module.exports = {
 					return;
 				}
 				
-				db.AppointmentsFunctions.isAppointmentAvailable(staffId, date, hour).done(function(data){	
+				db.AppointmentsFunctions.isStandByexceeded(clientId, hour).done(function(data){	
 
-					if (data.result && !parseInt(data.result)) {
-						logger.info('scheduleAppointment - something_went_wrong')
-						resolve({'error': 'something_went_wrong'});
+					if (data.result && parseInt(data.result)) {
+						logger.info('scheduleAppointment - stand_by_exceeded')
+						resolve({'error': 'stand_by_exceeded'});
 						return;
 					}
 				
-					db.AppointmentsFunctions.scheduleAppointment(staffId, date, hour, clientId)
-						.done(function(data){
+					db.AppointmentsFunctions.isAppointmentAvailable(staffId, date, hour).done(function(data){	
+
+						if (data.result && !parseInt(data.result)) {
+							logger.info('scheduleAppointment - something_went_wrong')
+							resolve({'error': 'something_went_wrong'});
+							return;
+						}
+					
+						db.AppointmentsFunctions.scheduleAppointment(staffId, date, hour, clientId).done(function(data){							
 							resolve(data);
 						},function(e){
 							reject(e);
 						});	
+					},function(e){
+						reject(e);
+					});	
 				},function(e){
 					reject(e);
 				});		
