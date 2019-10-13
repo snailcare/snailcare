@@ -317,7 +317,15 @@ module.exports = {
            
             return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
 				pool.connect().then(client => {	
-					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staff_id = '${staffId}' and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int) and queue.hour <= 23 and ${hour} <= 23) or (${hour} > 23 and date = ${date} and id = '${clientId}')`;
+					query = `
+				select count(1) as result 
+				from snailcare.queue 
+				where 
+					(date = ${date} and hour = ${hour} and id = '${clientId}') or 
+					(date = ${date} and staff_id = '${staffId}' and id = '${clientId}') or 
+					(id = '${clientId}' and staff_id = '${staffId}' and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int) and queue.hour <= 23 and ${hour} <= 23) or 
+					(${hour} > 23 and date = ${date} and id = '${clientId}')
+				`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
