@@ -148,8 +148,7 @@ angular.module('snailcareapp.factory', []).factory('AppFactory', function($http)
 				clientId: data.client,
 				staffId: data.staff_id,
 				date: data.date,
-				hour: data.hour,
-				originalHour: data.original_hour
+				hour: data.hour
 			  }
 			});
 		},

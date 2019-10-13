@@ -101,8 +101,7 @@ router.post('/reschedule_appointment', function(req, res){
 	var date = req.body.date;
 	var hour = req.body.hour;
 	var clientId = req.body.clientId;
-	var originalHour = req.body.originalHour;
-	appointments.rescheduleAppointment(staffId, date, hour, clientId, originalHour).done(function(data){		
+	appointments.rescheduleAppointment(staffId, date, hour, clientId).done(function(data){		
 		res.json({status: true, data: data});
 	},function(e){
 		res.json({status: false, error: e});

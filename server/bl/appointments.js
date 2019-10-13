@@ -205,7 +205,7 @@ module.exports = {
 		
 	},
 	
-	rescheduleAppointment: function(staffId, date, hour, clientId, originalHour) {	
+	rescheduleAppointment: function(staffId, date, hour, clientId) {	
 	
 		return new Promise(function(resolve, reject) {	
 
@@ -215,50 +215,38 @@ module.exports = {
 				return;
 			}
 
-			db.AppointmentsFunctions.isClientAlreadyRecheduledAppointment(date, clientId, hour, staffId).done(function(data){		
-		
-				if (data.result && parseInt(data.result)) {
-					logger.info('scheduleAppointment - already_exists')
-					resolve({'error': 'already_exists'});
+			db.AppointmentsFunctions.isAppointmentAvailable(staffId, date, hour).done(function(data){	
+
+				if (data.result && !parseInt(data.result)) {
+					logger.info('scheduleAppointment - something_went_wrong')
+					resolve({'error': 'something_went_wrong'});
 					return;
 				}
-				
-				db.AppointmentsFunctions.isAppointmentAvailable(staffId, date, hour).done(function(data){	
-
-					if (data.result && !parseInt(data.result)) {
-						logger.info('scheduleAppointment - something_went_wrong')
-						resolve({'error': 'something_went_wrong'});
-						return;
-					}
-				
-					db.AppointmentsFunctions.scheduleAppointment(staffId, date, hour, clientId)
-						.done(function(data){
-							db.AppointmentsFunctions.isExists(staffId, date, originalHour, clientId).done(function(data){								
-								if (!(data.result) || !(parseInt(data.result))) {
-									logger.info('Something went wrong');
-									resolve({'error': 'not_exists'});
-									return;
-								}
-								
-								db.AppointmentsFunctions.removeAppointment(staffId, date, originalHour, clientId)
-									.done(function(data){
-										resolve(data);
-									},function(e){
-										reject(e);
-									});	
-							},function(e){
-								reject(e);
-							});
+			
+				db.AppointmentsFunctions.scheduleAppointment(staffId, date, hour, clientId)
+					.done(function(data){
+						db.AppointmentsFunctions.isExists(staffId, date, originalHour, clientId).done(function(data){								
+							if (!(data.result) || !(parseInt(data.result))) {
+								logger.info('Something went wrong');
+								resolve({'error': 'not_exists'});
+								return;
+							}
+							
+							db.AppointmentsFunctions.removeAppointmentAfterReschedule(staffId, date, clientId, hour)
+								.done(function(data){
+									resolve(data);
+								},function(e){
+									reject(e);
+								});	
 						},function(e){
 							reject(e);
-						});	
-				},function(e){
-					reject(e);
-				});		
-				
+						});
+					},function(e){
+						reject(e);
+					});	
 			},function(e){
 				reject(e);
-			});		
+			});	
 			
 		});			
 	}

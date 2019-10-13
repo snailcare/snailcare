@@ -341,26 +341,6 @@ module.exports = {
 			
         },
 		
-		isClientAlreadyRecheduledAppointment: function(date, clientId, hour, staffId) {
-           
-            return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
-				pool.connect().then(client => {	
-					query = `select count(1) as result from snailcare.queue where (date = ${date} and hour = ${hour} and id = '${clientId}') or (id = '${clientId}' and staff_id = '${staffId}' and hour <= 23) and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
-					logger.info(`running: ${query}`);
-					client.query(query).then(res => {	
-						client.release();
-						logger.info(res.rows[0])
-						resolve(res.rows[0]);
-					})
-					.catch(e => {						
-						client.release();						
-						reject(e);
-					})					
-				})
-            });
-			
-        },
-		
 		isAppointmentAvailable: function(staffId, date, hour) {
            
             return new Promise(function(resolve, reject) {		
@@ -386,6 +366,26 @@ module.exports = {
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
 					query = `update snailcare.queue set id = null where staff_id = '${staffId}' and date = ${date} and hour = ${hour} and id = '${id}'`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {	
+						client.release();
+						logger.info(res.rows[0])
+						resolve(res.rows[0]);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
+		
+		removeAppointmentAfterReschedule: function(staffId, date, clientId, hour)) {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `update snailcare.queue set id = null where staff_id = '${staffId}' and id = '${clientId}' and date >= cast(to_char(current_date, 'YYYYMMDD') as int) and not (date = ${date} and hour = ${hour})`;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
@@ -560,27 +560,38 @@ module.exports = {
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
 					query = `
-		select 
-			queue.staff_id, queue.date,
-			staff.personal_information as doctor, branch.name as branch, profession.name as profession,			
-			to_char(to_timestamp(queue.date || '_' || 1, 'YYYYMMDD_HH24'), 'YYYY-MM-DD') as "date_formatted",
-			min(to_char(to_timestamp(queue.date || '_' || least(case when queue.id is null then queue.hour else 100 end, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')) as "fullDate",
-			min(case when queue.id is null then queue.hour else 100 end) as hour,
-			max(case when queue.id = '${id}' and queue.hour > 23 then 1 else 0 end) as is_available,
-			max(case when queue.id = '${id}' then queue.hour else -1 end) as original_hour
-		from snailcare.queue queue 		 
-					join snailcare.staff staff on queue.staff_id = staff.id
-						join snailcare.branch branch on staff.branch = branch.code
-							join snailcare.profession profession on staff.profession = profession.code
-		where 
-			queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)
-		group by
-			1,2,3,4,5,6
-		having 
-			max(case when queue.id = '${id}' and queue.hour > 23 then 1 else 0 end) = 1 and
-			min(case when queue.id is null then queue.hour else 100 end) < 24
-		order by
-			2,5 desc`;
+			select 
+				staff_id,
+				doctor,
+				branch,
+				profession,
+				min(date_formatted) as date_formatted,
+				min(full_date) as "fullDate",
+				min(cast(to_char(to_timestamp(full_date, 'YYYY-MM-DD HH24:00'), 'YYYYMMDD') as int4))  as "date",
+				min(cast(to_char(to_timestamp(full_date, 'YYYY-MM-DD HH24:00'), 'HH') as int4))  as "hour"
+			from (
+				select 
+					queue.staff_id, queue.date,
+					staff.personal_information as doctor, branch.name as branch, profession.name as profession,			
+					to_char(to_timestamp(queue.date || '_' || 1, 'YYYYMMDD_HH24'), 'YYYY-MM-DD') as "date_formatted",
+					min(to_char(to_timestamp(queue.date || '_' || least(case when queue.id is null then queue.hour else 100 end, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')) as "full_date",
+					min(case when queue.id is null then queue.hour else 100 end) as hour,
+					max(case when queue.id = '${id}' and queue.hour > 23 then 1 else 0 end) as is_stand_by
+				from snailcare.queue queue 		 
+							join snailcare.staff staff on queue.staff_id = staff.id
+								join snailcare.branch branch on staff.branch = branch.code
+									join snailcare.profession profession on staff.profession = profession.code
+				where 
+					queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int)
+				group by
+					1,2,3,4,5,6
+				having 
+					max(case when queue.id = '${id}' and queue.hour > 23 then 1 else 0 end) = 1 and -- is_stand_by
+					min(case when queue.id is null then queue.hour else 100 end) < 24 -- there is an available appointment
+						
+			) t
+			group by 1,2,3,4
+			order by 5 desc, 1 `;
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
