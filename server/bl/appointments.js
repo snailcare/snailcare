@@ -224,14 +224,7 @@ module.exports = {
 				}
 			
 				db.AppointmentsFunctions.scheduleAppointment(staffId, date, hour, clientId)
-					.done(function(data){
-						db.AppointmentsFunctions.isExists(staffId, date, originalHour, clientId).done(function(data){								
-							if (!(data.result) || !(parseInt(data.result))) {
-								logger.info('Something went wrong');
-								resolve({'error': 'not_exists'});
-								return;
-							}
-							
+					.done(function(data){							
 							db.AppointmentsFunctions.removeAppointmentAfterReschedule(staffId, date, clientId, hour)
 								.done(function(data){
 									resolve(data);
