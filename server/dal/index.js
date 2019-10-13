@@ -567,8 +567,8 @@ module.exports = {
 				profession,
 				min(date_formatted) as date_formatted,
 				min(full_date) as "fullDate",
-				min(cast(to_char(to_timestamp(full_date, 'YYYY-MM-DD HH24:00'), 'YYYYMMDD') as int4))  as "date",
-				min(cast(to_char(to_timestamp(full_date, 'YYYY-MM-DD HH24:00'), 'HH') as int4))  as "hour"
+				cast(to_char(to_timestamp(min(full_date), 'YYYY-MM-DD HH24:00'), 'YYYYMMDD') as int4)  as "date",
+				cast(to_char(to_timestamp(min(full_date), 'YYYY-MM-DD HH24:00'), 'HH') as int4)  as "hour"
 			from (
 				select 
 					queue.staff_id, queue.date,
