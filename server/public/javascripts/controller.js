@@ -173,6 +173,9 @@
 				} else if (data.data && data.data.error && data.data.error === "something_went_wrong") {
 					$rootScope.formData.successMsg = null;
 					$rootScope.formData.errMsg = "something went wrong";
+				} else if (data.data && data.data.error && data.data.error === "stand_by_exceeded") {
+					$rootScope.formData.successMsg = null;
+					$rootScope.formData.errMsg = "only 5 stand by appointments is possible";
 				} else {
 					$rootScope.formData.errMsg = null;
 					$rootScope.formData = {};
