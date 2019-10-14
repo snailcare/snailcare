@@ -53,7 +53,7 @@
 					<label class="form-group">
                         <span class="input input-label">Date</span><br/>
                         <select ng-model="formData.date" ng-change="formData.hour = ''">							 						
-							<option ng-repeat="x in mCtrl.appointments | filter:{ staff_id: this.formData.staff} | orderBy : 'date' | unique: 'date'" value="{{x.date}}">{{x.date_formatted}}</option>  
+							<option ng-repeat="x in mCtrl.appointments | filter:{ staff_id: this.formData.staff}:true | orderBy : 'date' | unique: 'date'" value="{{x.date}}">{{x.date_formatted}}</option>  
 							<option value="" hidden />							
                         </select>
                     </label><br/><br/>
@@ -61,7 +61,7 @@
 					<label class="form-group">
                         <span class="input input-label">Hour</span><br/>
                         <select ng-model="formData.hour">							 						
-							<option ng-repeat="x in mCtrl.appointments | filter:{ date: this.formData.date, staff_id: this.formData.staff}  | orderBy : 'hour'| unique: 'hour'"  value="{{x.hour}}">{{x.hour_desc}}</option>  
+							<option ng-repeat="x in mCtrl.appointments | filter:{staff_id: this.formData.staff}:true  | filter:{ date: this.formData.date} | orderBy : 'hour'| unique: 'hour'"  value="{{x.hour}}">{{x.hour_desc}}</option>  
 							<option value="" hidden />							
                         </select>
                     </label><br/><br/>
