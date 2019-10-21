@@ -203,7 +203,12 @@ module.exports = {
 		select 
 			queue.staff_id, queue.date, queue.hour, queue_status.name as status, queue.id, 
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
-			to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00') as "fullDate",
+			case 
+				when queue.hour <= 23 then 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+				else 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
+			end as "fullDate",
 			case when queue.hour > 23 then 'stand_by_' || cast ((queue.hour - 24 + 1) as varchar(5)) else cast (queue.hour as varchar(5)) end as hour_desc
 		from snailcare.queue queue 
 			join snailcare.queue_status queue_status on queue.status = queue_status.code		 
@@ -235,7 +240,12 @@ module.exports = {
 		select 
 			queue.staff_id, queue.date, queue.hour, queue_status.name as status, queue.id, 
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
-			to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00') as "fullDate",
+			case 
+				when queue.hour <= 23 then 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+				else 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
+			end as "fullDate",
 			case when queue.hour > 23 then 'stand_by_' || cast ((queue.hour - 24 + 1) as varchar(5)) else cast (queue.hour as varchar(5)) end as hour_desc,
 			to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD') as "date_formatted"
 		from snailcare.queue queue 
@@ -462,7 +472,12 @@ module.exports = {
 		select 
 			queue.staff_id, queue.date, queue.hour, queue_status.name as status, queue.id, 
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
-			to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00') as "fullDate",
+			case 
+				when queue.hour <= 23 then 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+				else 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
+			end as "fullDate",
 			case when queue.hour > 23 then 'stand_by_' || cast ((queue.hour - 24 + 1) as varchar(5)) else cast (queue.hour as varchar(5)) end as hour_desc
 		from snailcare.queue queue 
 			join snailcare.queue_status queue_status on queue.status = queue_status.code		 
@@ -496,7 +511,12 @@ module.exports = {
 		select 
 			queue.staff_id, queue.date, queue.hour, queue_status.name as status, queue.id, 
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
-			to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00') as "fullDate",
+			case 
+				when queue.hour <= 23 then 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+				else 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
+			end as "fullDate",
 			case when queue.hour > 23 then 'stand_by_' || cast ((queue.hour - 24 + 1) as varchar(5)) else cast (queue.hour as varchar(5)) end as hour_desc
 		from snailcare.queue queue 
 			join snailcare.queue_status queue_status on queue.status = queue_status.code		 
@@ -530,7 +550,12 @@ module.exports = {
 		select 
 			queue.staff_id, queue.date, queue.hour, queue_status.name as status, queue.id, 
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
-			to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00') as "fullDate",
+			case 
+				when queue.hour <= 23 then 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+				else 
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
+			end as "fullDate",
 			case when queue.hour > 23 then 'stand_by_' || cast ((queue.hour - 24 + 1) as varchar(5)) else cast (queue.hour as varchar(5)) end as hour_desc,
 			to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD') as "date_formatted"
 		from snailcare.queue queue 
