@@ -294,7 +294,7 @@ module.exports = {
 		
 		isStandByexceeded: function(clientId, hour) {
            
-            return new Promise(function(resolve, reject) { // return true if client already scheduled an appointment for this date		
+            return new Promise(function(resolve, reject) { // return positve number if client stand by option is exceeded		
 				pool.connect().then(client => {	
 					query = `
 		select count(1) as result where 5 <= (
