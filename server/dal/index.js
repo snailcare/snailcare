@@ -205,7 +205,7 @@ module.exports = {
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
 			case 
 				when queue.hour <= 23 then 
-					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')
 				else 
 					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
 			end as "fullDate",
@@ -242,7 +242,7 @@ module.exports = {
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
 			case 
 				when queue.hour <= 23 then 
-					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')
 				else 
 					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
 			end as "fullDate",
@@ -474,7 +474,7 @@ module.exports = {
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
 			case 
 				when queue.hour <= 23 then 
-					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')
 				else 
 					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
 			end as "fullDate",
@@ -513,7 +513,7 @@ module.exports = {
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
 			case 
 				when queue.hour <= 23 then 
-					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')
 				else 
 					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
 			end as "fullDate",
@@ -552,7 +552,7 @@ module.exports = {
 			staff.personal_information as doctor, branch.name as branch, profession.name as profession,
 			case 
 				when queue.hour <= 23 then 
-					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00:00')
+					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD HH24:00')
 				else 
 					to_char(to_timestamp(queue.date || '_' || least(queue.hour, 23), 'YYYYMMDD_HH24'), 'YYYY-MM-DD')
 			end as "fullDate",
