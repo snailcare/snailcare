@@ -334,7 +334,7 @@ module.exports = {
 					(date = ${date} and hour = ${hour} and id = '${clientId}') or -- client already schedule appointment at the same date&hour
 					(date = ${date} and staff_id = '${staffId}' and id = '${clientId}') or -- client already schedule appointment for the same doctor at the date
 					(id = '${clientId}' and staff_id = '${staffId}' and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int) and queue.hour <= 23 and ${hour} <= 23) or -- client alreday scheudle an regular appointment in the future
-					(id = '${clientId}' and staff_id = '${staffId}' and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int) and queue.hour <= 23 and date >= ${date}) or -- client already schedule an earlier appointment so future stand by appointment is not allowed
+					(id = '${clientId}' and staff_id = '${staffId}' and queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int) and queue.hour <= 23 and date <= ${date}) or -- client already schedule an earlier appointment so future stand by appointment is not allowed
 					(${hour} > 23 and date = ${date} and id = '${clientId}') -- client already scheudle an stadyby appointment at the same date
 				`;
 					logger.info(`running: ${query}`);
