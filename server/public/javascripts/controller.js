@@ -701,9 +701,9 @@
 			  }		
 			  
 			  for (i = 0; i < mCtrl.schedulePick.length; i++) {
-				  metrics[Number(mCtrl.schedulePick[i].hour)][Number(mCtrl.schedulePick[i].hour)] = Number(mCtrl.schedulePick[i].count) * 100;
+				  metrics[Number(mCtrl.schedulePick[i].hour)][Number(mCtrl.schedulePick[i].hour)] = Number(mCtrl.schedulePick[i].count);
 				
-				  metrics[Number(mCtrl.schedulePick[i].hour)][(Number(mCtrl.schedulePick[i].hour) + 1) % 24] = Number(mCtrl.schedulePick[i].count) * 100;		  
+				  metrics[Number(mCtrl.schedulePick[i].hour)][(Number(mCtrl.schedulePick[i].hour) + 1) % 24] = Number(mCtrl.schedulePick[i].count);		  
 				  
 			  }	
 				new Chart(document.getElementById("chartjs-3"), {
