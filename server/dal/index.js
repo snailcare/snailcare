@@ -594,7 +594,7 @@ module.exports = {
 				min(date_formatted) as date_formatted,
 				min(full_date) as "fullDate",
 				cast(to_char(to_timestamp(min(full_date), 'YYYY-MM-DD HH24:00'), 'YYYYMMDD') as int4)  as "date",
-				cast(to_char(to_timestamp(min(full_date), 'YYYY-MM-DD HH24:00'), 'HH') as int4)  as "hour"
+				cast(to_char(to_timestamp(min(full_date), 'YYYY-MM-DD HH24:00'), 'HH24') as int4)  as "hour"
 			from (
 				select 
 					queue.staff_id, queue.date,
@@ -894,7 +894,7 @@ module.exports = {
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
 					query = `
-				SELECT to_char(last_modified_date, 'HH') as "hour", count(1) as "count"
+				SELECT to_char(last_modified_date, 'HH24') as "hour", count(1) as "count"
 				FROM snailcare.queue
 				group by 1
 				order by 1
