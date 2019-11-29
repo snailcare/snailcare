@@ -412,7 +412,7 @@ module.exports = {
 			
         },
 		
-		getStandByAppointments: function(staffId, date, hour) {
+		getStandByAppointments: function(staffId, date) {
            
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {						
@@ -426,7 +426,7 @@ module.exports = {
 		where 
 			queue.id is not null and
 			staff_id = '${staffId}' and 
-			queue.date >= ${date} and
+			queue.date = ${date} and
 			queue.date >= cast(to_char(current_date, 'YYYYMMDD') as int) and
 			hour > 23`;			
 			
