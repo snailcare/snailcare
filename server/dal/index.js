@@ -392,6 +392,26 @@ module.exports = {
 			
         },
 		
+		removeAppointmentForDeletedUser: function(id) {
+           
+            return new Promise(function(resolve, reject) {				
+				pool.connect().then(client => {	
+					query = `update snailcare.queue set id = null where date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
+					logger.info(`running: ${query}`);
+					client.query(query).then(res => {	
+						client.release();
+						logger.info(res.rows[0])
+						resolve(res.rows[0]);
+					})
+					.catch(e => {						
+						client.release();						
+						reject(e);
+					})					
+				})
+            });
+			
+        },
+		
 		removeAppointmentAfterReschedule: function(staffId, date, clientId, hour) {
            
             return new Promise(function(resolve, reject) {				

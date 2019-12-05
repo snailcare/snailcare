@@ -95,8 +95,13 @@ module.exports = {
 				}
 				
 				db.UserFunctions.removeClient(id)
-					.done(function(data){
-						resolve(data);
+					.done(function(data){						
+						db.AppointmentsFunctions.removeAppointmentForDeletedUser(id)
+							.done(function(data){
+								resolve(data);
+							},function(e){
+								reject(e);
+							});					
 					},function(e){
 						reject(e);
 					});	
