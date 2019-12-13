@@ -396,7 +396,7 @@ module.exports = {
            
             return new Promise(function(resolve, reject) {				
 				pool.connect().then(client => {	
-					query = `update snailcare.queue set id = null where date >= cast(to_char(current_date, 'YYYYMMDD') as int)`;
+					query = `update snailcare.queue set id = null where date >= cast(to_char(current_date, 'YYYYMMDD') as int) and id = '${id}';
 					logger.info(`running: ${query}`);
 					client.query(query).then(res => {	
 						client.release();
