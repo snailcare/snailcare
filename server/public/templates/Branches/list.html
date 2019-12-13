@@ -30,7 +30,7 @@
                     <td>{{branch.areaCode}}</td>
                     <td>{{branch.areaCodeName}}</td>
                     <td>
-                        <i class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="mCtrl.fillBranchUpdateFileds($index);mCtrl.popBlocker($index)" style="cursor:pointer"></i>
+                        <i class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="mCtrl.fillBranchUpdateFileds(mCtrl.branchList.indexOf(branch));mCtrl.popBlocker(mCtrl.branchList.indexOf(branch))" style="cursor:pointer"></i>
                     </td>
                 </tr>
                 </tbody>

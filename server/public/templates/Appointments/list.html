@@ -34,7 +34,7 @@
                     <td>{{appointment.id}}</td>	
 					<td>{{appointment.status}}</td>					
                     <td>
-						<i class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="mCtrl.removeAppointment($index)" style="cursor:pointer"></i>
+						<i class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="mCtrl.removeAppointment(mCtrl.appointments.indexOf(appointment))" style="cursor:pointer"></i>
                     </td>
                 </tr>
                 </tbody>

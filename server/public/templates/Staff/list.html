@@ -36,8 +36,8 @@
 					<td>{{staff.branchName}}</td>
 					<td>{{staff.personalInformation}}</td>
                     <td style="white-space: nowrap;">
-						<i class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="mCtrl.removeStaff($index)" style="cursor:pointer"></i>
-                        <i class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="mCtrl.fillStaffUpdateFileds($index);mCtrl.popBlocker($index)" style="cursor:pointer"></i>
+						<i class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="mCtrl.removeStaff(mCtrl.staffs.indexOf(staff))" style="cursor:pointer"></i>
+                        <i class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="mCtrl.fillStaffUpdateFileds(mCtrl.staffs.indexOf(staff));mCtrl.popBlocker(mCtrl.staffs.indexOf(staff))" style="cursor:pointer"></i>
                     </td>
                 </tr>
                 </tbody>
