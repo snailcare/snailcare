@@ -15,7 +15,7 @@
     "express-session": "~1.13.0",
     "fs": "~0.0.2",
     "mkdirp": "",
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "morgan": "~1.7.0",
     "pg": "",
     "pg-pool": "",
